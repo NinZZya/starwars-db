@@ -3,11 +3,9 @@ import React from 'react';
 const AppHeader = () => {
   return (
     <nav className="header d-flex">
-      <p className="header-logo">
-        <a href="#" >
-          Star Wars DB
-        </a>
-      </p>
+      <a href="#" >
+        <img src="./img/star-wars.svg" alt="logo" width="100" height="45"></img>
+      </a>
       <ul className="d-flex">
         <li>
           <a href="#">People</a>
