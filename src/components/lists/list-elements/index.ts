@@ -1,1 +1,1 @@
-export {default} from './list-elements';
+export { default } from './list-elements';
