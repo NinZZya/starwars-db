@@ -1,6 +1,6 @@
 
 export default class SwapiService {
-  _baseUrl = 'https://swapi.dev';
+  _baseUrl = 'https://swapi.dev/api';
   _personsUrl = '/people/';
   _planetsUrl = '/planets/';
   _starshipsUrl = '/starships/';
