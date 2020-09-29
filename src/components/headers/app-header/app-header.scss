@@ -18,10 +18,19 @@
   text-decoration: none;
 }
 
-.header h3 a {
+.header-logo {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.header-logo a {
   color: white;
 }
 
-.header h3 a:hover {
+.header-logo a:hover {
   color: #00bc8c;
 }
