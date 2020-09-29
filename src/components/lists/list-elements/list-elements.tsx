@@ -2,8 +2,16 @@ import React from 'react';
 
 const ListElements = () => {
   return (
-    <ul>
-      <li></li>
+    <ul className="item-list list-group">
+      <li className="list-group-item">
+        Luke Skywalker
+        </li>
+      <li className="list-group-item">
+        Darth Vader
+        </li>
+      <li className="list-group-item">
+        R2-D2
+        </li>
     </ul>
   );
 };
