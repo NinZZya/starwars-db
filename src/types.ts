@@ -1,7 +1,8 @@
+export type TId = string;
 export interface IPlanet {
-  id: string;
+  id: TId;
   name: string;
-  population: number;
+  population: string;
   rotationPeriod: number;
   diameter: number;
 };
