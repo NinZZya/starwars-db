@@ -3,7 +3,7 @@ import Spiner from '../../spiner';
 import ErrorMessage from '../../error-message';
 import PlanetCard from './components/planet-card';
 import SwapiService from '../../../services/swapi-service';
-import { getRandomInt } from '../../utils/random';
+import { getRandomInt } from '../../../utils/random';
 import { IPlanet } from '../../../types';
 
 const TIMEOUT = 5000;
