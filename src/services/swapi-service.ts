@@ -1,3 +1,5 @@
+import { TId } from "types";
+
 interface IRPerson {
   url: string;
   name: string;
@@ -9,7 +11,7 @@ interface IRPerson {
 interface IRPlanet {
   url: string;
   name: string;
-  population: number;
+  population: string;
   rotation_period: number;
   diameter: number;
 }
@@ -49,7 +51,7 @@ export default class SwapiService {
     return responce.results.map(this._adaptPerson);
   }
 
-  async getPerson(id: string) {
+  async getPerson(id: TId) {
     const responce = await this.getResource(`${this._personsUrl}${id}`);
     return this._adaptPerson(responce);
   }
@@ -59,7 +61,7 @@ export default class SwapiService {
     return responce.results.map(this._adaptPlanet);
   }
 
-  async getPlanet(id: string) {
+  async getPlanet(id: TId) {
     const responce = await this.getResource(`${this._planetsUrl}${id}`);
     return this._adaptPlanet(responce);
   }
@@ -69,7 +71,7 @@ export default class SwapiService {
     return responce.results.map(this._adaptStarship);
   }
 
-  async getStarship(id: string) {
+  async getStarship(id: TId) {
     const responce = await this.getResource(`${this._starshipsUrl}${id}`);
     return this._adaptStarship(responce);
   }
@@ -95,7 +97,7 @@ export default class SwapiService {
     return {
       id: this._extractId(planet),
       name: planet.name,
-      population: Number(planet.population),
+      population: planet.population,
       rotationPeriod: Number(planet.rotation_period),
       diameter: Number(planet.diameter),
     };
