@@ -28,15 +28,22 @@ interface IRStarship {
   cargoCapacity: number;
 }
 
+enum Url {
+  BASE = 'https://swapi.dev/api',
+  PERSONS = '/people/',
+  PLANETS = '/planets/',
+  STARSHIPS = '/starships/',
+}
+
+const extractId = (item: IRPerson | IRPlanet | IRStarship) => {
+  const idRegExp = /\/([0-9]*)\/$/;
+  const id = item.url.match(idRegExp);
+  return id ? id[1] : '';
+}
 
 export default class SwapiService {
-  _baseUrl = 'https://swapi.dev/api';
-  _personsUrl = '/people/';
-  _planetsUrl = '/planets/';
-  _starshipsUrl = '/starships/';
-
-  async getResource(url: string) {
-    const endPoint = `${this._baseUrl}${url}`;
+  static async getResource(url: string) {
+    const endPoint = `${Url.BASE}${url}`;
     const res = await fetch(endPoint);
 
     if (!res.ok) {
@@ -46,46 +53,39 @@ export default class SwapiService {
     return await res.json();
   }
 
-  async getAllPersons() {
-    const responce = await this.getResource(this._personsUrl);
-    return responce.results.map(this._adaptPerson);
+  static async getAllPersons() {
+    const responce = await this.getResource(Url.PERSONS);
+    return responce.results.map(SwapiService.adaptPerson);
   }
 
-  async getPerson(id: TId) {
-    const responce = await this.getResource(`${this._personsUrl}${id}`);
-    return this._adaptPerson(responce);
+  static async getPerson(id: TId) {
+    const responce = await this.getResource(`${Url.PERSONS}${id}`);
+    return SwapiService.adaptPerson(responce);
   }
 
-  async getAllPlanets() {
-    const responce = await this.getResource(this._planetsUrl);
-    return responce.results.map(this._adaptPlanet);
+  static async getAllPlanets() {
+    const responce = await this.getResource(Url.PLANETS);
+    return responce.results.map(SwapiService.adaptPlanet);
   }
 
-  async getPlanet(id: TId) {
-    const responce = await this.getResource(`${this._planetsUrl}${id}`);
-    return this._adaptPlanet(responce);
+  static async getPlanet(id: TId) {
+    const responce = await this.getResource(`${Url.PLANETS}${id}`);
+    return SwapiService.adaptPlanet(responce);
   }
 
-  async getAllStarships() {
-    const responce = await this.getResource(this._starshipsUrl);
-    return responce.results.map(this._adaptStarship);
+  static async getAllStarships() {
+    const responce = await this.getResource(Url.STARSHIPS);
+    return responce.results.map(SwapiService.adaptStarship);
   }
 
-  async getStarship(id: TId) {
-    const responce = await this.getResource(`${this._starshipsUrl}${id}`);
-    return this._adaptStarship(responce);
+  static async getStarship(id: TId) {
+    const responce = await this.getResource(`${Url.STARSHIPS}${id}`);
+    return SwapiService.adaptStarship(responce);
   }
 
-
-  _extractId(item: IRPerson | IRPlanet | IRStarship) {
-    const idRegExp = /\/([0-9]*)\/$/;
-    const id = item.url.match(idRegExp);
-    return id ? id[1] : '';
-  }
-
-  _adaptPerson(person: IRPerson) {
+  static adaptPerson(person: IRPerson) {
     return {
-      id: this._extractId(person),
+      id: extractId(person),
       name: person.name,
       gender: person.gender,
       birthYear: person.birthYear,
@@ -93,9 +93,9 @@ export default class SwapiService {
     }
   }
 
-  _adaptPlanet(planet: IRPlanet) {
+  static adaptPlanet(planet: IRPlanet) {
     return {
-      id: this._extractId(planet),
+      id: extractId(planet),
       name: planet.name,
       population: planet.population,
       rotationPeriod: Number(planet.rotation_period),
@@ -103,9 +103,9 @@ export default class SwapiService {
     };
   }
 
-  _adaptStarship(starship: IRStarship) {
+  static adaptStarship(starship: IRStarship) {
     return {
-      id: this._extractId(starship),
+      id: extractId(starship),
       name: starship.name,
       model: starship.model,
       manufacturer: starship.manufacturer,

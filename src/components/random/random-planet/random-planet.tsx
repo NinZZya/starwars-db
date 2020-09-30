@@ -8,7 +8,6 @@ import { IPlanet } from '../../../types';
 
 const TIMEOUT = 5000;
 class RandomPlanet extends PureComponent {
-  swapiService = new SwapiService();
 
   interval: NodeJS.Timeout | number | null = null;
 
@@ -50,7 +49,7 @@ class RandomPlanet extends PureComponent {
   updatePlanet() {
     const id = String(getRandomInt(2, 17));
 
-    this.swapiService
+    SwapiService
       .getPlanet(id)
       .then(this.onPlanetLoaded)
       .catch(this.onError);
