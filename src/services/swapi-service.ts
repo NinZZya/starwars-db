@@ -1,11 +1,12 @@
-import { TId } from "types";
+import { IPersons, IPlanets, IStarships, TId } from '../types';
 
 interface IRPerson {
   url: string;
   name: string;
   gender: string;
-  birthYear: string;
-  eyeColor: string;
+  birth_year: string;
+  height: number;
+  mass: number;
 }
 
 interface IRPlanet {
@@ -13,7 +14,12 @@ interface IRPlanet {
   name: string;
   population: string;
   rotation_period: number;
+  orbital_period: number;
   diameter: number;
+  climate: string;
+  gravity: string;
+  surface_water: number;
+  terrain: string;
 }
 
 interface IRStarship {
@@ -21,18 +27,21 @@ interface IRStarship {
   name: string;
   model: string;
   manufacturer: string;
-  costInCredits: number;
+  cost_in_credits: number;
   length: number;
   crew: number;
   passengers: number;
-  cargoCapacity: number;
+  cargo_capacity: number;
 }
 
 enum Url {
-  BASE = 'https://swapi.dev/api',
-  PERSONS = '/people/',
-  PLANETS = '/planets/',
-  STARSHIPS = '/starships/',
+  BASE = 'https://swapi.dev/api/',
+  PERSONS = 'people/',
+  PLANETS = 'planets/',
+  STARSHIPS = 'starships/',
+  IMG = 'https://starwars-visualguide.com/assets/img/',
+  PERSONS_IMG = 'characters/',
+  PLANETS_IMG = 'planets/',
 }
 
 const extractId = (item: IRPerson | IRPlanet | IRStarship) => {
@@ -53,9 +62,15 @@ export default class SwapiService {
     return await res.json();
   }
 
-  static async getAllPersons() {
+  static async getPersons() {
     const responce = await this.getResource(Url.PERSONS);
-    return responce.results.map(SwapiService.adaptPerson);
+    const persons = responce.results.reduce((map: IPersons, person: IRPerson) => {
+      const adaptPerson = SwapiService.adaptPerson(person);
+      map[adaptPerson.id] = adaptPerson;
+      return map;
+    }, {});
+
+    return persons;
   }
 
   static async getPerson(id: TId) {
@@ -63,9 +78,14 @@ export default class SwapiService {
     return SwapiService.adaptPerson(responce);
   }
 
-  static async getAllPlanets() {
+  static async getPlanets() {
     const responce = await this.getResource(Url.PLANETS);
-    return responce.results.map(SwapiService.adaptPlanet);
+    const planets = responce.results.reduce((map: IPlanets, planet: IRPlanet) => {
+      const adaptPlanet = SwapiService.adaptPlanet(planet);
+      map[adaptPlanet.id] = adaptPlanet;
+      return map;
+    }, {});
+    return planets;
   }
 
   static async getPlanet(id: TId) {
@@ -73,9 +93,15 @@ export default class SwapiService {
     return SwapiService.adaptPlanet(responce);
   }
 
-  static async getAllStarships() {
+  static async getStarships() {
     const responce = await this.getResource(Url.STARSHIPS);
-    return responce.results.map(SwapiService.adaptStarship);
+    const starships = responce.results.reduce((map: IStarships, starship: IRStarship) => {
+      const adaptStarship = SwapiService.adaptStarship(starship);
+      map[adaptStarship.id] = adaptStarship;
+      return map;
+    }, {});
+
+    return starships;
   }
 
   static async getStarship(id: TId) {
@@ -84,38 +110,62 @@ export default class SwapiService {
   }
 
   static adaptPerson(person: IRPerson) {
+    const id = extractId(person);
+    const height = Number(person.height);
+    const mass = Number(person.mass);
+
     return {
-      id: extractId(person),
+      id,
       name: person.name,
       gender: person.gender,
-      birthYear: person.birthYear,
-      eyeColor: person.eyeColor,
+      birthYear: person.birth_year,
+      height: isNaN(height) ? -1 : height,
+      mass: isNaN(mass) ? -1 : mass,
+      image: `${Url.IMG}${Url.PERSONS_IMG}${Number(id)}.jpg`,
     }
   }
 
   static adaptPlanet(planet: IRPlanet) {
+    const id = extractId(planet);
+    const rotationPeriod = Number(planet.rotation_period);
+    const orbitalPeriod = Number(planet.orbital_period);
+    const diameter = Number(planet.diameter);
+    const surfaceWater = Number(planet.surface_water);
+
     return {
-      id: extractId(planet),
+      id,
       name: planet.name,
       population: planet.population,
-      rotationPeriod: Number(planet.rotation_period),
-      diameter: Number(planet.diameter),
+      rotationPeriod: isNaN(rotationPeriod) ? -1 : rotationPeriod,
+      orbitalPeriod: isNaN(orbitalPeriod) ? -1 : orbitalPeriod,
+      diameter: isNaN(diameter) ? -1 : diameter,
+      climate: planet.climate,
+      gravity: planet.gravity,
+      surfaceWater: isNaN(surfaceWater) ? -1 : surfaceWater,
+      terrain: planet.terrain,
+      image: `${Url.IMG}${Url.PLANETS_IMG}${Number(id) + 1}.jpg`,
     };
   }
 
   static adaptStarship(starship: IRStarship) {
+      const id = extractId(starship);
+      const costInCredits = Number(starship.cost_in_credits);
+      const length = Number(starship.length);
+      const crew = Number(starship.crew);
+      const passengers = Number(starship.passengers);
+      const cargoCapacity = Number(starship.cargo_capacity)
+
     return {
-      id: extractId(starship),
+      id,
       name: starship.name,
       model: starship.model,
       manufacturer: starship.manufacturer,
-      costInCredits: Number(starship.costInCredits),
-      length: Number(starship.length),
-      crew: Number(starship.crew),
-      passengers: Number(starship.passengers),
-      cargoCapacity: Number(starship.cargoCapacity),
+      costInCredits: isNaN(costInCredits) ? -1 : costInCredits,
+      length: isNaN(length) ? -1 : length,
+      crew: isNaN(crew) ? -1 : crew,
+      passengers: isNaN(passengers) ? -1 : passengers,
+      cargoCapacity: isNaN(cargoCapacity) ? -1 : cargoCapacity,
+      image: '',
     }
   }
 }
-
-
