@@ -9,7 +9,8 @@ module.exports = {
   },
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
-    port: 8888
+    port: 8888,
+    historyApiFallback: true
   },
   mode: "development",
   resolve: {

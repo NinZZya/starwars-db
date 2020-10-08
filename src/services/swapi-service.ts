@@ -1,12 +1,58 @@
+import { IPersons, IPlanets, IStarships, TId } from '../types';
+
+interface IRPerson {
+  url: string;
+  name: string;
+  gender: string;
+  birth_year: string;
+  height: number;
+  mass: number;
+}
+
+interface IRPlanet {
+  url: string;
+  name: string;
+  population: string;
+  rotation_period: number;
+  orbital_period: number;
+  diameter: number;
+  climate: string;
+  gravity: string;
+  surface_water: number;
+  terrain: string;
+}
+
+interface IRStarship {
+  url: string;
+  name: string;
+  model: string;
+  manufacturer: string;
+  cost_in_credits: number;
+  length: number;
+  crew: number;
+  passengers: number;
+  cargo_capacity: number;
+}
+
+enum Url {
+  BASE = 'https://swapi.dev/api/',
+  PERSONS = 'people/',
+  PLANETS = 'planets/',
+  STARSHIPS = 'starships/',
+  IMG = 'https://starwars-visualguide.com/assets/img/',
+  PERSONS_IMG = 'characters/',
+  PLANETS_IMG = 'planets/',
+}
+
+const extractId = (item: IRPerson | IRPlanet | IRStarship) => {
+  const idRegExp = /\/([0-9]*)\/$/;
+  const id = item.url.match(idRegExp);
+  return id ? id[1] : '';
+}
 
 export default class SwapiService {
-  _baseUrl = 'https://swapi.dev/api';
-  _personsUrl = '/people/';
-  _planetsUrl = '/planets/';
-  _starshipsUrl = '/starships/';
-
-  async getResource(url: string) {
-    const endPoint = `${this._baseUrl}${url}`;
+  static async getResource(url: string) {
+    const endPoint = `${Url.BASE}${url}`;
     const res = await fetch(endPoint);
 
     if (!res.ok) {
@@ -16,35 +62,110 @@ export default class SwapiService {
     return await res.json();
   }
 
-  async getAllPersons() {
-    const responce = await this.getResource(this._personsUrl);
-    return responce.results;
+  static async getPersons() {
+    const responce = await this.getResource(Url.PERSONS);
+    const persons = responce.results.reduce((map: IPersons, person: IRPerson) => {
+      const adaptPerson = SwapiService.adaptPerson(person);
+      map[adaptPerson.id] = adaptPerson;
+      return map;
+    }, {});
+
+    return persons;
   }
 
-  async getPerson(id: string) {
-    const responce = await this.getResource(`${this._personsUrl}${id}`);
-    return responce;
+  static async getPerson(id: TId) {
+    const responce = await this.getResource(`${Url.PERSONS}${id}`);
+    return SwapiService.adaptPerson(responce);
   }
 
-  async getAllPlanets() {
-    const responce = await this.getResource(this._planetsUrl);
-    return responce.results;
+  static async getPlanets() {
+    const responce = await this.getResource(Url.PLANETS);
+    const planets = responce.results.reduce((map: IPlanets, planet: IRPlanet) => {
+      const adaptPlanet = SwapiService.adaptPlanet(planet);
+      map[adaptPlanet.id] = adaptPlanet;
+      return map;
+    }, {});
+    return planets;
   }
 
-  async getPlanet(id: string) {
-    const responce = await this.getResource(`${this._planetsUrl}${id}`);
-    return responce;
+  static async getPlanet(id: TId) {
+    const responce = await this.getResource(`${Url.PLANETS}${id}`);
+    return SwapiService.adaptPlanet(responce);
   }
 
-  async getAllStarships() {
-    const responce = await this.getResource(this._starshipsUrl);
-    return responce.results;
+  static async getStarships() {
+    const responce = await this.getResource(Url.STARSHIPS);
+    const starships = responce.results.reduce((map: IStarships, starship: IRStarship) => {
+      const adaptStarship = SwapiService.adaptStarship(starship);
+      map[adaptStarship.id] = adaptStarship;
+      return map;
+    }, {});
+
+    return starships;
   }
 
-  async getStarship(id: string) {
-    const responce = await this.getResource(`${this._starshipsUrl}${id}`);
-    return responce;
+  static async getStarship(id: TId) {
+    const responce = await this.getResource(`${Url.STARSHIPS}${id}`);
+    return SwapiService.adaptStarship(responce);
+  }
+
+  static adaptPerson(person: IRPerson) {
+    const id = extractId(person);
+    const height = Number(person.height);
+    const mass = Number(person.mass);
+
+    return {
+      id,
+      name: person.name,
+      gender: person.gender,
+      birthYear: person.birth_year,
+      height: isNaN(height) ? -1 : height,
+      mass: isNaN(mass) ? -1 : mass,
+      image: `${Url.IMG}${Url.PERSONS_IMG}${Number(id)}.jpg`,
+    }
+  }
+
+  static adaptPlanet(planet: IRPlanet) {
+    const id = extractId(planet);
+    const rotationPeriod = Number(planet.rotation_period);
+    const orbitalPeriod = Number(planet.orbital_period);
+    const diameter = Number(planet.diameter);
+    const surfaceWater = Number(planet.surface_water);
+
+    return {
+      id,
+      name: planet.name,
+      population: planet.population,
+      rotationPeriod: isNaN(rotationPeriod) ? -1 : rotationPeriod,
+      orbitalPeriod: isNaN(orbitalPeriod) ? -1 : orbitalPeriod,
+      diameter: isNaN(diameter) ? -1 : diameter,
+      climate: planet.climate,
+      gravity: planet.gravity,
+      surfaceWater: isNaN(surfaceWater) ? -1 : surfaceWater,
+      terrain: planet.terrain,
+      image: `${Url.IMG}${Url.PLANETS_IMG}${Number(id) + 1}.jpg`,
+    };
+  }
+
+  static adaptStarship(starship: IRStarship) {
+      const id = extractId(starship);
+      const costInCredits = Number(starship.cost_in_credits);
+      const length = Number(starship.length);
+      const crew = Number(starship.crew);
+      const passengers = Number(starship.passengers);
+      const cargoCapacity = Number(starship.cargo_capacity)
+
+    return {
+      id,
+      name: starship.name,
+      model: starship.model,
+      manufacturer: starship.manufacturer,
+      costInCredits: isNaN(costInCredits) ? -1 : costInCredits,
+      length: isNaN(length) ? -1 : length,
+      crew: isNaN(crew) ? -1 : crew,
+      passengers: isNaN(passengers) ? -1 : passengers,
+      cargoCapacity: isNaN(cargoCapacity) ? -1 : cargoCapacity,
+      image: '',
+    }
   }
 }
-
-
