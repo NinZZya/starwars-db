@@ -3,7 +3,7 @@ import React from 'react';
 const ErrorMessage = () => {
   return (
     <div className="error-message">
-      <img src="./img/death-star.png" alt="error icon"/>
+      <img src="/img/death-star.png" alt="error icon"/>
       <span className="boom">BOOM!</span>
       <span>
         something has gone terribly wrong
