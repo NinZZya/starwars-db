@@ -3,7 +3,7 @@ import Spiner from '../../components/spiner';
 import ErrorMessage from '../../components/messages/error-message';
 import { LoadingStatus } from '../../const';
 import {
-  IPersons, IPlanets, IStarships,
+  IPersons, IPlanets, IStarships, TId,
 } from '../../types';
 import ItemDetails from '../../components/details/item-details';
 
@@ -15,18 +15,23 @@ interface P {
   items: IPlanets | IPersons | IStarships;
 }
 
+interface S {
+  activeId: TId,
+  ids: TId[],
+}
+
 const TIMEOUT = 5000;
 
 const withRandom = (Component: T, timeout: number = TIMEOUT) => {
 
-  class WithRandom extends PureComponent<P> {
+  class WithRandom extends PureComponent<P, S> {
     constructor(props: P) {
       super(props);
-    };
 
-    state = {
-      activeId: '',
-      ids: [],
+      this.state = {
+        activeId: '',
+        ids: [],
+      };
     };
 
     interval: NodeJS.Timeout | null = null;
