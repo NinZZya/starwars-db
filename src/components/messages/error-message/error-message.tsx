@@ -22,7 +22,7 @@ const ErrorMessage: FC<P> = (props) => {
     <div className="error-message">
       <img src="/img/death-star.png" alt="error icon" />
       {title ? <ErrorMessageTitle text={title} /> : null}
-      {texts ? texts.map((item) => <ErrorMessageText text={item} />) : null}
+      {texts ? texts.map((item, index) => <ErrorMessageText text={item} key={`text-error-${index}`} />) : null}
       {children ? Children.map(children, (child) => child)  : null}
     </div>
   );
