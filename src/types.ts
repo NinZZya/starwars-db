@@ -1,4 +1,4 @@
-import { LoadingStatus } from './const';
+import { LoadingStatus, UserStatus } from './const';
 import NameSpace from './redux/name-space';
 import SwapiService from './services/swapi-service';
 
@@ -72,12 +72,19 @@ export interface IStarships {
   [key: string]: IStarship,
 }
 
+export type TUserPayload = UserStatus | IUser | string | null;
 export type TPersonsPayload = LoadingStatus | IPersons;
 export type TPlanetsPayload = LoadingStatus | IPlanets;
 export type TStarshipsPayload = LoadingStatus | IStarships ;
 
-export type TPayload = TPersonsPayload | TPlanetsPayload | TStarshipsPayload;
+export type TPayload = TUserPayload| TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
 
+
+export interface IUserState {
+  status: UserStatus;
+  user: IUser;
+  error: string;
+};
 export interface IPersonsState {
   status: LoadingStatus;
   items: IPersons;
@@ -97,4 +104,5 @@ export interface IState {
   [NameSpace.PERSONS]: IPersonsState;
   [NameSpace.PLANETS]: IPlanetsState;
   [NameSpace.STARSHIPS]: IStarshipsState;
+  [NameSpace.USER]: IUserState;
 };

@@ -13,7 +13,8 @@ const initialState = {
   items: {},
 };
 
-const personsReducer = (state = initialState, action: IAction) => {
+
+export default (state = initialState, action: IAction) => {
   switch (action.type) {
     case PersonsType.SET_PERSONS_STATUS:
       return {
@@ -29,6 +30,3 @@ const personsReducer = (state = initialState, action: IAction) => {
       return state;
   };
 };
-
-
-export default personsReducer;

@@ -4,6 +4,12 @@ export enum LoadingStatus {
   ERROR = 'SUCSESS',
 };
 
+export enum UserStatus {
+  NO_AUTH = 'NO_AUTH',
+  AUTH = 'AUTH',
+  AUTH_ERROR = 'AUTH_ERROR',
+}
+
 export enum AppPath {
   ROOT = '/',
   PERSONS = '/persons/',
