@@ -73,7 +73,7 @@ const App: FC<P> = (props) => {
         second={<PlanetWithRadom status={planetsStatus} items={planets} />}
         third={
           isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
-            <div className="random-planet jumbotron rounded">
+            <div className="jumbotron">
               <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
             </div>
         }
