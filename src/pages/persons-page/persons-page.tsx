@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import RowTwoCol from '../../components/rows/row-two-col';
+import Sort from '../../components/sort';
 import ListElements from '../../components/list-elements';
 import PersonDetails from '../../components/details/person-details';
 import Spiner from '../../components/spiner';
@@ -63,10 +64,13 @@ const getListPersons = (props: P) => {
   }
 
   return (
-    <ListElements
-      items={persons}
-      path={AppPath.PERSONS}
-    />
+    <>
+      <Sort />
+      <ListElements
+        items={persons}
+        path={AppPath.PERSONS}
+      />
+    </>
   );
 }
 

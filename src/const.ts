@@ -30,3 +30,8 @@ export const menuItems = [
   {name: 'Planets', path: AppPath.PLANETS},
   {name: 'Starships', path: AppPath.STARSHIPS},
 ];
+
+export enum SortType {
+  UP = 'UP',
+  DOWN = 'DOWN',
+}
