@@ -55,8 +55,8 @@ const App: FC<P> = (props) => {
       <ErrorBoundry>
         <RowThreeCol
           first={<PersonWithRadom status={personsStatus} items={persons} />}
-          second={<StarshipWithRadom status={starshipsStatus} items={starships} />}
-          third={<PlanetWithRadom status={planetsStatus} items={planets} />}
+          second={<PlanetWithRadom status={planetsStatus} items={planets} />}
+          third={<StarshipWithRadom status={starshipsStatus} items={starships} />}
         />
 
       </ErrorBoundry>
