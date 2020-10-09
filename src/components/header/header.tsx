@@ -33,6 +33,11 @@ const Header: FC<P> = (props) => {
           </li>
         ))}
       </ul>
+      <ul className="d-flex login">
+        <li>
+          <Link to={AppPath.ROOT}>Log in</Link>
+        </li>
+      </ul>
     </nav>
   );
 };

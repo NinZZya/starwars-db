@@ -4,7 +4,7 @@ import RowTwoCol from '../../components/rows/row-two-col';
 import ListElements from '../../components/list-elements';
 import StarshipDetails from '../../components/details/starship-details';
 import Spiner from '../../components/spiner';
-import ErrorMessage from '../../components/error-message';
+import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
 import { IStarships, TId } from '../../types';
 

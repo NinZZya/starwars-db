@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import NotFoundMessage from '../../components/not-found-message';
-import { AppPath } from '../../const';
+import NotFoundMessage from '../../components/messages/not-found-message';
 
 
 const NotFoundPage = () => {

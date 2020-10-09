@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import ListElements from '../../components/list-elements';
 import Spiner from '../../components/spiner';
-import ErrorMessage from '../../components/error-message';
+import ErrorMessage from '../../components/messages/error-message';
 import { getPlanets, getPlanetsStatus } from '../../redux/planets/planets-selectors';
 import { AppPath, LoadingStatus } from '../../const';
 import { IPlanets, IState } from '../../types';

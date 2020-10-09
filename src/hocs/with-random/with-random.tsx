@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import Spiner from '../../components/spiner';
-import ErrorMessage from '../../components/error-message';
+import ErrorMessage from '../../components/messages/error-message';
 import { LoadingStatus } from '../../const';
 import {
   IPersons, IPlanets, IStarships,

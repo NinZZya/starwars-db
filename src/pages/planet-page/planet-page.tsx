@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Redirect, useRouteMatch } from 'react-router-dom';
 import PlanetDeils from '../../components/details/planet-details';
 import Spiner from '../../components/spiner';
-import ErrorMessage from '../../components/error-message';
+import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
 import { IPlanets } from '../../types';
 
