@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
-
 import ErrorMessage from '../messages/error-message';
+
 
 export default class ErrorBoundry extends Component {
 

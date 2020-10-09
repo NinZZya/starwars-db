@@ -5,4 +5,4 @@ import { makeActionCreator } from '../../utils/utils';
 export const setUserStatus = makeActionCreator(UserType.SET_USER_STATUS);
 export const setUser = makeActionCreator(UserType.SET_USER);
 export const setError = makeActionCreator(UserType.SET_ERROR);
-export const resetUSer = makeActionCreator(UserType.RESET_USER);
+export const resetUser = makeActionCreator(UserType.RESET_USER);

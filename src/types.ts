@@ -1,3 +1,5 @@
+import { Dispatch, Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { LoadingStatus, UserStatus } from './const';
 import NameSpace from './redux/name-space';
 import SwapiService from './services/swapi-service';
@@ -8,6 +10,10 @@ export type TId = string;
 export interface IItem {
   image: string;
   name: string;
+}
+
+export interface IText {
+  text: string,
 }
 
 export interface IAuthData {
@@ -106,3 +112,5 @@ export interface IState {
   [NameSpace.STARSHIPS]: IStarshipsState;
   [NameSpace.USER]: IUserState;
 };
+
+export type TDispatch = ThunkDispatch<IState, TSwapiServices, Action>;

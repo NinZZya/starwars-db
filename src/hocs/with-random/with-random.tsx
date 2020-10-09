@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import Spiner from '../../components/spiner';
 import ErrorMessage from '../../components/messages/error-message';
+import ItemDetails from '../../components/details/item-details';
 import { LoadingStatus } from '../../const';
 import {
   IPersons, IPlanets, IStarships, TId,
 } from '../../types';
-import ItemDetails from '../../components/details/item-details';
 
 
 type T = typeof ItemDetails;

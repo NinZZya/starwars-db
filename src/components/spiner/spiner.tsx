@@ -1,6 +1,7 @@
 
 import React from 'react';
 
+
 const Spinner = () => {
   return (
     <div className="lds-css">
@@ -11,5 +12,6 @@ const Spinner = () => {
     </div>
   );
 };
+
 
 export default Spinner;

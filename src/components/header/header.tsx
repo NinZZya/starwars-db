@@ -11,6 +11,7 @@ interface IMenuItem {
 interface IHeader {
   isAuth: boolean;
   menuItems: IMenuItem[];
+  onLogout: () => void;
 }
 
 type P = RouteComponentProps & IHeader;
@@ -29,7 +30,7 @@ class Header extends PureComponent<P, S> {
   }
 
   render() {
-    const { isAuth, menuItems, history } = this.props;
+    const { isAuth, menuItems, history, onLogout } = this.props;
     const { isUserMenuShow } = this.state;
 
     return (
@@ -49,7 +50,7 @@ class Header extends PureComponent<P, S> {
             </li>
           ))}
         </ul>
-        <div className="login">
+        <div className="user-menu">
           {isAuth ? (
             <div>
               <div className="dropdown">
@@ -70,14 +71,14 @@ class Header extends PureComponent<P, S> {
                   className={`dropdown-menu ${isUserMenuShow ? 'show' : ''}`}
                   aria-labelledby="dropdownMenuButton"
                 >
-                  <Link className="dropdown-item" to={AppPath.LOG_OUT}>
+                  <Link to={AppPath.ROOT} className="dropdown-item" onClick={onLogout}>
                     Log out ...
                   </Link>
                 </div>
               </div>
             </div>
           ) : (
-              <div>
+              <div className="login">
                 <Link to={AppPath.LOG_IN}>Log in</Link>
               </div>
             )}

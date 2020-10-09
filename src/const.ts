@@ -17,7 +17,6 @@ export enum AppPath {
   STARSHIPS = '/starships/',
   NOT_FOUND = '/not-found/',
   LOG_IN = '/log-in/',
-  LOG_OUT = '/log-out/',
 }
 
 export enum IdName {

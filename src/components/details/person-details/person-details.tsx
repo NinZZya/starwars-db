@@ -3,6 +3,7 @@ import ItemDetails from '../item-details';
 import ItemDetail from '../item-details/components/item-detail';
 import { IItem } from '../../../types';
 
+
 interface P {
   item: IItem
 }
