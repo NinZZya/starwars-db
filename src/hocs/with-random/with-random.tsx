@@ -98,7 +98,7 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
       const card = this._getCard();
 
       return (
-        <div className="random-planet jumbotron rounded">
+        <div className="random-container jumbotron rounded">
           {spiner}
           {card}
           {errorMessage}
