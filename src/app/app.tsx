@@ -19,13 +19,13 @@ import StarshipsPage from '../pages/starships-page';
 import NotFoundPage from '../pages/not-found-page';
 import LoginPage from '../pages/login-page';
 import withRandom from '../hocs/with-random';
-import { getError, getUser, getUserStatus } from '../redux/user/user-selectors';
-import { getPersons, getPersonsStatus } from '../redux/persons/persons-selectors';
-import { getPlanets, getPlanetsStatus } from '../redux/planets/planets-selectors';
+import * as UserSelector from '../redux/user/user-selectors';
+import * as PersonsSelector from '../redux/persons/persons-selectors';
+import * as PlanetsSelector from '../redux/planets/planets-selectors';
+import * as StarshipsSelector from '../redux/starships/starships-selectors';
 import { resetUser } from '../redux/user/user-actions';
 import { loginAsync } from '../redux/user/user-operations';
-import { getStarships, getStarshipsStatus } from '../redux/starships/starships-selectors';
-import { IState, IPersons, IPlanets, IStarships, IUser, IAuthData, TDispatch } from '../types';
+import { IState, IPerson, IPlanets, IStarships, IUser, IAuthData, TDispatch, TId } from '../types';
 import { AppPath, IdName, LoadingStatus, menuItems, UserStatus } from '../const';
 
 
@@ -35,7 +35,8 @@ interface P {
   user: IUser;
   error: string;
   personsStatus: LoadingStatus;
-  persons: IPersons;
+  persons: IPerson[];
+  getPerson: (id: TId) => IPerson;
   planetsStatus: LoadingStatus;
   planets: IPlanets;
   starshipsStatus: LoadingStatus;
@@ -48,7 +49,7 @@ const NO_AUTH_STARHIPS_RANDOM_TEXT = 'For get information about starships you mu
 
 const App: FC<P> = (props) => {
   const {
-    personsStatus, persons,
+    personsStatus, persons, getPerson,
     planetsStatus, planets,
     starshipsStatus, starships,
     userStatus, user, error,
@@ -62,21 +63,21 @@ const App: FC<P> = (props) => {
 
   const isAuth = (userStatus === UserStatus.AUTH) && (user !== null);
 
-  const PersonWithRadom = withRandom(PersonDetails);
-  const PlanetWithRadom = withRandom(PlanetDetails, 6500);
-  const StarshipWithRadom = withRandom(StarshipDetails, 8000);
+  const PersonWithRadom = withRandom(PersonDetails, getPerson);
+  // const PlanetWithRadom = withRandom(PlanetDetails, getPerson, 6500);
+  // const StarshipWithRadom = withRandom(StarshipDetails, getPerson,  8000);
 
   const randonBlock = (
     <ErrorBoundry>
       <RowThreeCol
         first={<PersonWithRadom status={personsStatus} items={persons} />}
-        second={<PlanetWithRadom status={planetsStatus} items={planets} />}
-        third={
-          isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
-            <div className="jumbotron">
-              <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
-            </div>
-        }
+        // second={<PlanetWithRadom status={planetsStatus} items={planets} />}
+        // third={
+        //   isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
+        //     <div className="jumbotron">
+        //       <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
+        //     </div>
+        // }
       />
     </ErrorBoundry>
   );
@@ -87,7 +88,7 @@ const App: FC<P> = (props) => {
       <Switch>
         <Route exact path={mainPath}>
           {randonBlock}
-          <PersonsPage status={personsStatus} items={persons} />
+          <PersonsPage status={personsStatus} items={persons} getItem={getPerson} />
         </Route>
         <Route exact path={`${AppPath.PLANETS}`}>
           <PlanetsPage />
@@ -114,15 +115,16 @@ const App: FC<P> = (props) => {
 };
 
 const mapStateToProps = (state: IState) => ({
-  userStatus: getUserStatus(state),
-  user: getUser(state),
-  error: getError(state),
-  personsStatus: getPersonsStatus(state),
-  persons: getPersons(state),
-  planetsStatus: getPlanetsStatus(state),
-  planets: getPlanets(state),
-  starshipsStatus: getStarshipsStatus(state),
-  starships: getStarships(state),
+  userStatus: UserSelector.getUserStatus(state),
+  user: UserSelector.getUser(state),
+  error: UserSelector.getError(state),
+  personsStatus: PersonsSelector.getPersonsStatus(state),
+  persons: PersonsSelector.getPersons(state),
+  getPerson: (id: TId) => PersonsSelector.getPerson(state, id),
+  planetsStatus: PlanetsSelector.getPlanetsStatus(state),
+  planets: PlanetsSelector.getPlanets(state),
+  starshipsStatus: StarshipsSelector.getStarshipsStatus(state),
+  starships: StarshipsSelector.getStarships(state),
 });
 
 

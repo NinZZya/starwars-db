@@ -1,28 +1,33 @@
 import React, { PureComponent } from 'react';
 import Spiner from '../../components/spiner';
+import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import ItemDetails from '../../components/details/item-details';
 import { LoadingStatus } from '../../const';
 import {
-  IPersons, IPlanets, IStarships, TId,
+  IPerson, IPlanets, IStarships, TId,
 } from '../../types';
+import PrivateRoue from 'components/private-route';
 
 
 type T = typeof ItemDetails;
 
+type TGetItem = (
+  (id: TId) => IPerson
+);
+
 interface P {
   status: LoadingStatus;
-  items: IPlanets | IPersons | IStarships;
+  items: IPerson[];
 }
 
 interface S {
   activeId: TId,
-  ids: TId[],
 }
 
 const TIMEOUT = 5000;
 
-const withRandom = (Component: T, timeout: number = TIMEOUT) => {
+const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) => {
 
   class WithRandom extends PureComponent<P, S> {
     constructor(props: P) {
@@ -30,7 +35,6 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
 
       this.state = {
         activeId: '',
-        ids: [],
       };
     };
 
@@ -51,18 +55,21 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
 
     updateCard() {
       const { status, items } = this.props;
-      const { activeId, ids } = this.state;
+      const { activeId } = this.state;
+
+      if (!items.length) {
+        return;
+      }
 
       if (status === LoadingStatus.SUCCESS) {
         if (activeId) {
           this.setState({
-            activeId: ids[Math.floor(Math.random() * ids.length)],
+            activeId: items[Math.floor(Math.random() * items.length)].id,
           });
         } else {
           const ids = Object.keys(items);
           this.setState({
             activeId: ids[Math.floor(Math.random() * ids.length)],
-            ids,
           });
         }
       }
@@ -77,18 +84,16 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
         return null;
       }
 
-      const ids = Object.keys(items);
-
-      if (ids.length) {
-        const id = !activeId ? ids[0] : activeId;
-        return <Component item={items[id]} />;
+      if (items.length) {
+        const id = !activeId ? items[0].id : activeId;
+        return <Component item={getItem(id)} />;
       }
 
       if (this.interval) {
         clearInterval(this.interval);
       }
 
-      return <div>No data</div>;
+      return <Message title={"No data"} />;
     }
 
     render() {

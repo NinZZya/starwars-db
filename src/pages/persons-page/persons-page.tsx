@@ -7,12 +7,13 @@ import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
-import { IPersons, TId } from '../../types';
+import { IPerson, TId } from '../../types';
 
 
 interface P {
-  status: LoadingStatus,
-  items: IPersons,
+  status: LoadingStatus;
+  items: IPerson[];
+  getItem: (id: TId) => IPerson;
 }
 
 interface IParams {
@@ -24,9 +25,9 @@ interface IMatch {
 }
 
 const getItemDetails = (props: P, activeId: TId) => {
-  const { status, items: persons } = props;
+  const { status, items: persons, getItem } = props;
   const isNull = (status === LoadingStatus.LOADING) ||
-    !Object.values(props.items).length;
+    !persons.length;
 
   if (isNull) {
     return null;
@@ -36,7 +37,7 @@ const getItemDetails = (props: P, activeId: TId) => {
     return <Message title={"Select person"} />;
   }
 
-  const person = persons[activeId];
+  const person = getItem(activeId);
 
   if (!person) {
     return <Message title={"No data"} />;
@@ -47,7 +48,7 @@ const getItemDetails = (props: P, activeId: TId) => {
 
 
 const getListPersons = (props: P) => {
-  const { status } = props;
+  const { status, items: persons } = props;
 
   if (status === LoadingStatus.LOADING) {
     return <Spiner />;
@@ -56,8 +57,6 @@ const getListPersons = (props: P) => {
   if (status === LoadingStatus.ERROR) {
     return <ErrorMessage />;
   }
-
-  const persons = Object.values(props.items);
 
   if (!persons.length) {
     <Message title={"No data"} />
