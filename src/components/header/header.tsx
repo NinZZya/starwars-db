@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { AppPath } from '../../const';
 
 
-const Header = () => {
+interface IMenuItem {
+  name: string;
+  path: AppPath;
+}
+
+interface P {
+  menuItems: IMenuItem[]
+}
+
+const Header: FC<P> = (props) => {
+  const { menuItems } = props;
   const history = useHistory();
 
   return (
@@ -12,15 +22,16 @@ const Header = () => {
         <img src="/img/star-wars.svg" alt="logo" width="100" height="45"></img>
       </Link>
       <ul className="d-flex">
-        <li>
-          <Link to={AppPath.PERSONS}>People</Link>
-        </li>
-        <li>
-          <Link to={AppPath.PLANETS}>Planets</Link>
-        </li>
-        <li>
-          <Link to={AppPath.STARSHIPS}>Starships</Link>
-        </li>
+        {menuItems.map((menuItem, index) => (
+          <li
+            key={`menu-item-${index}`}
+            onClick={() => history.push(menuItem.path)
+            }>
+            <Link to={menuItem.path}>
+              {menuItem.name}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );

@@ -20,7 +20,7 @@ import { getPersons, getPersonsStatus } from '../redux/persons/persons-selectors
 import { getPlanets, getPlanetsStatus } from '../redux/planets/planets-selectors';
 import { getStarships, getStarshipsStatus } from '../redux/starships/starships-selectors';
 import { IState, IPersons, IPlanets, IStarships } from '../types';
-import { AppPath, IdName, LoadingStatus } from '../const';
+import { AppPath, IdName, LoadingStatus, menuItems } from '../const';
 
 
 
@@ -51,7 +51,7 @@ const App: FC<P> = (props) => {
 
   return (
     <Router>
-      <Header />
+      <Header menuItems={menuItems} />
       <ErrorBoundry>
         <RowThreeCol
           first={<PersonWithRadom status={personsStatus} items={persons} />}

@@ -17,3 +17,9 @@ export enum IdName {
   PLANET = 'idPlanet',
   STARSHIP = 'idStarship',
 }
+
+export const menuItems = [
+  {name: 'People', path: AppPath.PERSONS},
+  {name: 'Planets', path: AppPath.PLANETS},
+  {name: 'Starships', path: AppPath.STARSHIPS},
+];
