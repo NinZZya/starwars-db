@@ -4,6 +4,7 @@ import RowTwoCol from '../../components/rows/row-two-col';
 import ListElements from '../../components/list-elements';
 import PersonDetails from '../../components/details/person-details';
 import Spiner from '../../components/spiner';
+import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
 import { IPersons, TId } from '../../types';
@@ -32,13 +33,13 @@ const getItemDetails = (props: P, activeId: TId) => {
   }
 
   if (!activeId) {
-    return <div>Select person</div>;
+    return <Message title={"Select person"} />;
   }
 
   const person = persons[activeId];
 
   if (!person) {
-    return <div>No data</div>;
+    return <Message title={"No data"} />;
   }
 
   return <PersonDetails item={person} />;
@@ -59,7 +60,7 @@ const getListPersons = (props: P) => {
   const persons = Object.values(props.items);
 
   if (!persons.length) {
-    return <div>No data</div>;
+    <Message title={"No data"} />
   }
 
   return (
