@@ -41,7 +41,8 @@ interface P {
   planets: Type.IPlanet[];
   getPlanet: (id: Type.TId) => Type.IPlanet;
   starshipsStatus: LoadingStatus;
-  starships: Type.IStarships;
+  starships: Type.IStarship[];
+  getStarship: Type.TGetStarship;
   login: (authData: Type.IAuthData) => void;
   logout: () => void;
 }
@@ -52,7 +53,7 @@ const App: FC<P> = (props) => {
   const {
     personsStatus, persons, getPerson,
     planetsStatus, planets, getPlanet,
-    starshipsStatus, starships,
+    starshipsStatus, starships, getStarship,
     userStatus, user, error,
     login: onLogin, logout: onLogout,
   } = props;
@@ -65,20 +66,20 @@ const App: FC<P> = (props) => {
   const isAuth = (userStatus === UserStatus.AUTH) && (user !== null);
 
   const PersonWithRadom = withRandom(PersonDetails, getPerson);
-  // const PlanetWithRadom = withRandom(PlanetDetails, getPlanet, 6500);
-  // const StarshipWithRadom = withRandom(StarshipDetails, getPerson,  8000);
+  const PlanetWithRadom = withRandom(PlanetDetails, getPlanet, 6500);
+  const StarshipWithRadom = withRandom(StarshipDetails, getStarship,  8000);
 
   const randonBlock = (
     <ErrorBoundry>
       <RowThreeCol
         first={<PersonWithRadom status={personsStatus} items={persons} />}
-        // second={<PlanetWithRadom status={planetsStatus} items={planets} />}
-        // third={
-        //   isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
-        //     <div className="jumbotron">
-        //       <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
-        //     </div>
-        // }
+        second={<PlanetWithRadom status={planetsStatus} items={planets} />}
+        third={
+          isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
+            <div className="jumbotron">
+              <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
+            </div>
+        }
       />
     </ErrorBoundry>
   );
@@ -99,7 +100,7 @@ const App: FC<P> = (props) => {
         </Route>
         <PrivateRoue isAuth={isAuth} exact={true} path={`${AppPath.STARSHIPS}:${IdName.STARSHIP}?`}>
           {randonBlock}
-          <StarshipsPage status={starshipsStatus} items={starships} />
+          <StarshipsPage status={starshipsStatus} items={starships} getItem={getStarship} />
         </PrivateRoue>
         <PrivateRoue isAuth={isAuth} exact={true} path={AppPath.LOG_IN}>
           <LoginPage
@@ -127,6 +128,7 @@ const mapStateToProps = (state: Type.IState) => ({
   getPlanet: (id: Type.TId) => PlanetsSelector.getPlanet(state, id),
   starshipsStatus: StarshipsSelector.getStarshipsStatus(state),
   starships: StarshipsSelector.getStarships(state),
+  getStarship: (id: Type.TId) => StarshipsSelector.getStarship(state, id),
 });
 
 

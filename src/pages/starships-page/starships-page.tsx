@@ -7,12 +7,13 @@ import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
-import { IStarships, TId } from '../../types';
+import * as Type from '../../types';
 
 
 interface P {
-  status: LoadingStatus,
-  items: IStarships,
+  status: LoadingStatus;
+  items: Type.IStarship[];
+  getItem: Type.TGetStarship;
 }
 
 interface IParams {
@@ -23,10 +24,10 @@ interface IMatch {
   params: IParams;
 }
 
-const getItemDetails = (props: P, activeId: TId) => {
-  const { status, items: starships } = props;
+const getItemDetails = (props: P, activeId: Type.TId) => {
+  const { status, items: starships, getItem } = props;
   const isNull = (status === LoadingStatus.LOADING) ||
-    !Object.values(props.items).length;
+    !starships.length;
 
   if (isNull) {
     return null;
@@ -36,7 +37,7 @@ const getItemDetails = (props: P, activeId: TId) => {
     return <div>Select straship</div>;
   }
 
-  const starship = starships[activeId];
+  const starship = getItem(activeId);
 
   if (!starship) {
     return <div>No data</div>;
@@ -47,7 +48,7 @@ const getItemDetails = (props: P, activeId: TId) => {
 
 
 const getListPersons = (props: P) => {
-  const { status } = props;
+  const { status, items: starships } = props;
 
   if (status === LoadingStatus.LOADING) {
     return <Spiner />;
@@ -56,8 +57,6 @@ const getListPersons = (props: P) => {
   if (status === LoadingStatus.ERROR) {
     return <ErrorMessage />;
   }
-
-  const starships = Object.values(props.items);
 
   if (!starships.length) {
     return <Message title={"No data"} />

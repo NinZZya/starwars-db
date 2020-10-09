@@ -8,14 +8,11 @@ import * as Type from '../../types';
 
 
 type T = typeof ItemDetails;
-
-
-
 type TGetItem = Type.TGetPerson | Type.TGetPlanet | Type.TGetStarship;
 
 interface P {
   status: LoadingStatus;
-  items: Type.IPerson[];
+  items: Type.IPerson[] | Type.IPlanet[] | Type.IStarship[];
 }
 
 interface S {
@@ -52,23 +49,15 @@ const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) 
 
     updateCard() {
       const { status, items } = this.props;
-      const { activeId } = this.state;
 
       if (!items.length) {
         return;
       }
 
       if (status === LoadingStatus.SUCCESS) {
-        if (activeId) {
-          this.setState({
-            activeId: items[Math.floor(Math.random() * items.length)].id,
-          });
-        } else {
-          const ids = Object.keys(items);
-          this.setState({
-            activeId: ids[Math.floor(Math.random() * ids.length)],
-          });
-        }
+        this.setState({
+          activeId: items[Math.floor(Math.random() * items.length)].id,
+        });
       }
     }
 
@@ -116,5 +105,6 @@ const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) 
   }
   return WithRandom;
 };
+
 
 export default withRandom;
