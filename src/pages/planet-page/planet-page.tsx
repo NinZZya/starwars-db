@@ -3,7 +3,7 @@ import { useRouteMatch } from 'react-router-dom';
 import PlanetDeils from '../../components/details/planet-details';
 import Spiner from '../../components/spiner';
 import ErrorMessage from '../../components/error-message';
-import NotFoundPage from '../not-found-page';
+import NotFoundMessage from '../../components/not-found-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
 import { IPlanets } from '../../types';
 
@@ -46,7 +46,7 @@ const PlanetPage: FC<P> = (props) => {
   const isNotFound = (status === LoadingStatus.SUCCESS) && (!planetsCount || !planet);
 
   if (isNotFound) {
-    return <NotFoundPage />
+    return <NotFoundMessage />
   }
 
   return <PlanetDeils item={planet} />;
