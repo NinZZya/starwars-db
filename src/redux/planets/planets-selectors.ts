@@ -6,5 +6,5 @@ const PLANETS_SPACE = NameSpace.PLANETS;
 
 
 export const getPlanetsStatus = (state: IState) => state[PLANETS_SPACE].status;
-export const getPlanets = (state: IState) => state[PLANETS_SPACE].items;
+export const getPlanets = (state: IState) => Object.values(state[PLANETS_SPACE].items);
 export const getPlanet = (state: IState, id: TId) => state[PLANETS_SPACE].items[id];

@@ -114,3 +114,7 @@ export interface IState {
 };
 
 export type TDispatch = ThunkDispatch<IState, TSwapiServices, Action>;
+
+export type TGetPerson = (id: TId) => IPerson;
+export type TGetPlanet = (id: TId) => IPlanet;
+export type TGetStarship = (id: TId) => IStarship;

@@ -1,30 +1,27 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
 import ListElements from '../../components/list-elements';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { getPlanets, getPlanetsStatus } from '../../redux/planets/planets-selectors';
 import { AppPath, LoadingStatus } from '../../const';
-import { IPlanets, IState } from '../../types';
+import * as Type from '../../types';
 
 
 interface P {
-  planetsStatus: LoadingStatus,
-  planets: IPlanets,
+  status: LoadingStatus,
+  items: Type.IPlanet[],
 }
 
 const PlanetsPage: FC<P> = (props) => {
-  const { planetsStatus } = props;
-  if (planetsStatus === LoadingStatus.LOADING) {
+  const { status, items: planets } = props;
+
+  if (status === LoadingStatus.LOADING) {
     return <Spiner />;
   }
 
-  if (planetsStatus === LoadingStatus.ERROR) {
+  if (status === LoadingStatus.ERROR) {
     return <ErrorMessage />;
   }
-
-  const planets = Object.values(props.planets);
 
   if (!planets.length) {
     return <Message title={"No data"} />
@@ -39,11 +36,4 @@ const PlanetsPage: FC<P> = (props) => {
 };
 
 
-const mapStateToProps = (state: IState) => ({
-  planetsStatus: getPlanetsStatus(state),
-  planets: getPlanets(state),
-});
-
-
-export { PlanetsPage };
-export default connect(mapStateToProps)(PlanetsPage);
+export default PlanetsPage;

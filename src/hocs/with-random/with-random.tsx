@@ -4,25 +4,22 @@ import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import ItemDetails from '../../components/details/item-details';
 import { LoadingStatus } from '../../const';
-import {
-  IPerson, IPlanets, IStarships, TId,
-} from '../../types';
-import PrivateRoue from 'components/private-route';
+import * as Type from '../../types';
 
 
 type T = typeof ItemDetails;
 
-type TGetItem = (
-  (id: TId) => IPerson
-);
+
+
+type TGetItem = Type.TGetPerson | Type.TGetPlanet | Type.TGetStarship;
 
 interface P {
   status: LoadingStatus;
-  items: IPerson[];
+  items: Type.IPerson[];
 }
 
 interface S {
-  activeId: TId,
+  activeId: Type.TId,
 }
 
 const TIMEOUT = 5000;
