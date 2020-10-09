@@ -16,6 +16,7 @@ import PlanetsPage from '../pages/planets-page';
 import PlanetPage from '../pages/planet-page';
 import StarshipsPage from '../pages/starships-page';
 import NotFoundPage from '../pages/not-found-page';
+import LoginPage from '../pages/login-page';
 import withRandom from '../hocs/with-random';
 import { getPersons, getPersonsStatus } from '../redux/persons/persons-selectors';
 import { getPlanets, getPlanetsStatus } from '../redux/planets/planets-selectors';
@@ -38,39 +39,43 @@ const NO_AUTH_STARHIPS_RANDOM_TEXT = 'For get information about starships you mu
 
 const App: FC<P> = (props) => {
   const {
-    personsStatus,persons,
+    personsStatus, persons,
     planetsStatus, planets,
     starshipsStatus, starships
-   } = props;
+  } = props;
 
   const mainPath = [
     AppPath.ROOT,
     `${AppPath.PERSONS}:${IdName.PERSON}?`,
   ];
 
+  const isAuth = true;
+
   const PersonWithRadom = withRandom(PersonDetails);
   const PlanetWithRadom = withRandom(PlanetDetails, 6500);
   const StarshipWithRadom = withRandom(StarshipDetails, 8000);
 
-  const isAuth = false;
-
-  return (
-    <Router>
-      <Header menuItems={menuItems} />
-      <ErrorBoundry>
-        <RowThreeCol
-          first={<PersonWithRadom status={personsStatus} items={persons} />}
-          second={<PlanetWithRadom status={planetsStatus} items={planets} />}
-          third={
-            isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
+  const randonBlock = (
+    <ErrorBoundry>
+      <RowThreeCol
+        first={<PersonWithRadom status={personsStatus} items={persons} />}
+        second={<PlanetWithRadom status={planetsStatus} items={planets} />}
+        third={
+          isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
             <div className="random-planet jumbotron rounded">
               <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
             </div>
-          }
-        />
-      </ErrorBoundry>
+        }
+      />
+    </ErrorBoundry>
+  );
+
+  return (
+    <Router>
+      <Header isAuth={isAuth} menuItems={menuItems} />
       <Switch>
         <Route exact path={mainPath}>
+          {randonBlock}
           <PersonsPage status={personsStatus} items={persons} />
         </Route>
         <Route exact path={`${AppPath.PLANETS}`}>
@@ -80,8 +85,16 @@ const App: FC<P> = (props) => {
           <PlanetPage status={planetsStatus} items={planets} />
         </Route>
         <Route exact path={`${AppPath.STARSHIPS}:${IdName.STARSHIP}?`}>
+          {randonBlock}
           <StarshipsPage status={starshipsStatus} items={starships} />
         </Route>
+        <Route exact path={AppPath.LOG_IN}>
+          <LoginPage />
+        </Route>
+        <Route exact path={AppPath.LOG_OUT} render={() => {
+          console.log(1);
+          return <Redirect to={AppPath.ROOT} />
+        }} />
         <Route exact path={AppPath.NOT_FOUND} component={NotFoundPage} />
         <Redirect to={AppPath.NOT_FOUND} />
       </Switch>
