@@ -1,0 +1,29 @@
+.signin-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem;
+}
+
+.form-signin {
+  width: 400px;
+  margin: 0;
+}
+
+.form-signin input {
+  margin: 2rem 0;
+  padding: 1rem;
+  height: auto;
+}
+
+.form-signin .btn {
+  margin: 2rem 0;
+  padding: 1rem;
+  height: auto;
+}
+
+.signin-page .error {
+  padding: 1rem;
+  color: #c78f22;
+}

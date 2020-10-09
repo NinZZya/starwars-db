@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-// import { IPerson, IPlanet, TId, TKeyPlanet, TKeyPerson } from 'types';
 
 
 interface P {

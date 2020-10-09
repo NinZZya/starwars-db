@@ -1,4 +1,7 @@
-import { IPersons, IPlanets, IStarships, TId } from '../types';
+import users from '../mocks/users';
+import {
+  IPersons, IPlanets, IStarships, TId, IAuthData
+} from '../types';
 
 interface IRPerson {
   url: string;
@@ -44,6 +47,10 @@ enum Url {
   PLANETS_IMG = 'planets/',
 }
 
+
+const DELAY_MS = 500;
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
 const extractId = (item: IRPerson | IRPlanet | IRStarship) => {
   const idRegExp = /\/([0-9]*)\/$/;
   const id = item.url.match(idRegExp);
@@ -51,6 +58,27 @@ const extractId = (item: IRPerson | IRPlanet | IRStarship) => {
 }
 
 export default class SwapiService {
+  static async auth(authData: IAuthData) {
+    const { login, password } = authData;
+
+    await delay(DELAY_MS)
+    const user = users.find((item) => item.login === login);
+
+    if (!user) {
+      throw new Error(`User not found`);
+    }
+
+    if (user && user.password === password) {
+      return {
+        id: user.id,
+        login: user.login,
+        avatar: '',
+      };
+    }
+
+    throw new Error(`Bad authorization. Try again.`);
+  }
+
   static async getResource(url: string) {
     const endPoint = `${Url.BASE}${url}`;
     const res = await fetch(endPoint);
@@ -148,12 +176,12 @@ export default class SwapiService {
   }
 
   static adaptStarship(starship: IRStarship) {
-      const id = extractId(starship);
-      const costInCredits = Number(starship.cost_in_credits);
-      const length = Number(starship.length);
-      const crew = Number(starship.crew);
-      const passengers = Number(starship.passengers);
-      const cargoCapacity = Number(starship.cargo_capacity)
+    const id = extractId(starship);
+    const costInCredits = Number(starship.cost_in_credits);
+    const length = Number(starship.length);
+    const crew = Number(starship.crew);
+    const passengers = Number(starship.passengers);
+    const cargoCapacity = Number(starship.cargo_capacity)
 
     return {
       id,

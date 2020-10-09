@@ -5,15 +5,19 @@
 @import 'components/details/person-details/person-details.scss';
 @import 'components/details/starship-details/starship-details.scss';
 @import 'components/error-boundry/error-boundry.scss';
-@import 'components/error-message/error-message.scss';
 @import 'components/header/header.scss';
 @import 'components/list-elements/list-elements.scss';
+@import 'components/messages/error-message/error-message.scss';
+@import 'components/messages/message/message.scss';
+@import 'components/messages/not-found-message/not-found-message.scss';
+@import 'components/private-route/private-route.scss';
 @import 'components/rows/row-three-col/row-three-col.scss';
 @import 'components/rows/row-two-col/row-two-col.scss';
 @import 'components/spiner/spiner.scss';
 
 @import 'hocs/with-random/with-random.scss';
 
+@import 'pages/login-page/login-page.scss';
 @import 'pages/not-found-page/not-found-page.scss';
 @import 'pages/persons-page/persons-page.scss';
 @import 'pages/planets-page/planets-page.scss';

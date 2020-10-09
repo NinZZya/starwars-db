@@ -13,6 +13,7 @@ const initialState = {
   items: {},
 };
 
+
 export default (state = initialState, action: IAction) => {
   switch (action.type) {
     case PlanetsType.SET_PLANETS_STATUS:

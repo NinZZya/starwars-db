@@ -4,7 +4,8 @@ import RowTwoCol from '../../components/rows/row-two-col';
 import ListElements from '../../components/list-elements';
 import StarshipDetails from '../../components/details/starship-details';
 import Spiner from '../../components/spiner';
-import ErrorMessage from '../../components/error-message';
+import Message from '../../components/messages/message';
+import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
 import { IStarships, TId } from '../../types';
 
@@ -59,7 +60,7 @@ const getListPersons = (props: P) => {
   const starships = Object.values(props.items);
 
   if (!starships.length) {
-    return <div>No data</div>;
+    return <Message title={"No data"} />
   }
 
   return (
@@ -92,4 +93,3 @@ const StarshipsPage: FC<P> = (props) => {
 
 
 export default StarshipsPage;
-

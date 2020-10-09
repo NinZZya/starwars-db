@@ -13,6 +13,7 @@ const initialState = {
   items: {},
 };
 
+
 export default (state = initialState, action: IAction) => {
   switch (action.type) {
     case StarshipsType.SET_STARSHIPS_STATUS:

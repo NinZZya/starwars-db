@@ -1,7 +1,10 @@
 .header {
+  align-items: center;
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2.5rem;
   padding-left: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header ul li {
@@ -17,4 +20,23 @@
 
 .header a:hover {
   text-decoration: none;
+}
+
+.header .user-menu {
+  margin-left: auto;
+  margin-right: 0.5rem;
+}
+
+.header .dropdown-toggle {
+  min-width: 200px;
+  text-align: left;
+
+  &::after {
+    margin-left: 5rem;
+  }
+}
+
+.header .login {
+  margin: 0;
+  padding: 0.5rem;
 }
