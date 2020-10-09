@@ -10,6 +10,17 @@ export interface IItem {
   name: string;
 }
 
+export interface IAuthData {
+  login: string;
+  password: string;
+}
+
+export interface IUser {
+  id: TId;
+  login: string;
+  avatar: string;
+}
+
 export type TSwapiServices = typeof SwapiService;
 
 export interface IPlanet {
