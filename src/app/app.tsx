@@ -10,6 +10,7 @@ import PersonDetails from '../components/details/person-details';
 import PlanetDetails from '../components/details/planet-details';
 import StarshipDetails from '../components/details/starship-details';
 import ErrorBoundry from '../components/error-boundry';
+import ErrorMessage from '../components/messages/error-message';
 import PersonsPage from '../pages/persons-page';
 import PlanetsPage from '../pages/planets-page';
 import PlanetPage from '../pages/planet-page';
@@ -33,6 +34,8 @@ interface P {
   starships: IStarships;
 }
 
+const NO_AUTH_STARHIPS_RANDOM_TEXT = 'For get information about starships you must log in';
+
 const App: FC<P> = (props) => {
   const {
     personsStatus,persons,
@@ -49,6 +52,8 @@ const App: FC<P> = (props) => {
   const PlanetWithRadom = withRandom(PlanetDetails, 6500);
   const StarshipWithRadom = withRandom(StarshipDetails, 8000);
 
+  const isAuth = false;
+
   return (
     <Router>
       <Header menuItems={menuItems} />
@@ -56,9 +61,13 @@ const App: FC<P> = (props) => {
         <RowThreeCol
           first={<PersonWithRadom status={personsStatus} items={persons} />}
           second={<PlanetWithRadom status={planetsStatus} items={planets} />}
-          third={<StarshipWithRadom status={starshipsStatus} items={starships} />}
+          third={
+            isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
+            <div className="random-planet jumbotron rounded">
+              <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
+            </div>
+          }
         />
-
       </ErrorBoundry>
       <Switch>
         <Route exact path={mainPath}>
