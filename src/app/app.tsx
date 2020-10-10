@@ -19,14 +19,15 @@ import StarshipsPage from '../pages/starships-page';
 import NotFoundPage from '../pages/not-found-page';
 import LoginPage from '../pages/login-page';
 import withRandom from '../hocs/with-random';
+import * as UserAction from '../redux/user/user-actions';
+import * as UserOperation from '../redux/user/user-operations';
 import * as UserSelector from '../redux/user/user-selectors';
 import * as PersonsSelector from '../redux/persons/persons-selectors';
+import * as PersonsAction from '../redux/persons/persons-actions';
 import * as PlanetsSelector from '../redux/planets/planets-selectors';
 import * as StarshipsSelector from '../redux/starships/starships-selectors';
-import { resetUser } from '../redux/user/user-actions';
-import { loginAsync } from '../redux/user/user-operations';
 import * as Type from '../types';
-import { AppPath, IdName, LoadingStatus, menuItems, UserStatus } from '../const';
+import { AppPath, IdName, LoadingStatus, SortType, UserStatus } from '../const';
 
 
 
@@ -37,14 +38,18 @@ interface P {
   personsStatus: LoadingStatus;
   persons: Type.IPerson[];
   getPerson: (id: Type.TId) => Type.IPerson;
+  personsSortType: string;
+  setPersonsSortType: (sortType: string) => void;
+  personsSortField: string;
+  setPersonsSortField: (sortFiled: string) => void;
   planetsStatus: LoadingStatus;
   planets: Type.IPlanet[];
   getPlanet: (id: Type.TId) => Type.IPlanet;
   starshipsStatus: LoadingStatus;
   starships: Type.IStarship[];
   getStarship: Type.TGetStarship;
-  login: (authData: Type.IAuthData) => void;
-  logout: () => void;
+  onLogin: (authData: Type.IAuthData) => void;
+  onLogout: () => void;
 }
 
 const NO_AUTH_STARHIPS_RANDOM_TEXT = 'For get information about starships you must log in';
@@ -52,10 +57,12 @@ const NO_AUTH_STARHIPS_RANDOM_TEXT = 'For get information about starships you mu
 const App: FC<P> = (props) => {
   const {
     personsStatus, persons, getPerson,
+    personsSortType, setPersonsSortType,
+    personsSortField, setPersonsSortField,
     planetsStatus, planets, getPlanet,
     starshipsStatus, starships, getStarship,
     userStatus, user, error,
-    login: onLogin, logout: onLogout,
+    onLogin, onLogout,
   } = props;
 
   const mainPath = [
@@ -64,18 +71,17 @@ const App: FC<P> = (props) => {
   ];
 
   const isAuth = (userStatus === UserStatus.AUTH) && (user !== null);
+  const RadomPerson = withRandom(PersonDetails, getPerson);
+  const RadomPlanet = withRandom(PlanetDetails, getPlanet, 6500);
+  const RadomStarship = withRandom(StarshipDetails, getStarship,  8000);
 
-  const PersonWithRadom = withRandom(PersonDetails, getPerson);
-  const PlanetWithRadom = withRandom(PlanetDetails, getPlanet, 6500);
-  const StarshipWithRadom = withRandom(StarshipDetails, getStarship,  8000);
-
-  const randonBlock = (
+  const randomBlock = (
     <ErrorBoundry>
       <RowThreeCol
-        first={<PersonWithRadom status={personsStatus} items={persons} />}
-        second={<PlanetWithRadom status={planetsStatus} items={planets} />}
+        first={<RadomPerson status={personsStatus} items={persons} />}
+        second={<RadomPlanet status={planetsStatus} items={planets} />}
         third={
-          isAuth ? <StarshipWithRadom status={starshipsStatus} items={starships} /> :
+          isAuth ? <RadomStarship status={starshipsStatus} items={starships} /> :
             <div className="jumbotron">
               <ErrorMessage text={NO_AUTH_STARHIPS_RANDOM_TEXT} />
             </div>
@@ -86,11 +92,19 @@ const App: FC<P> = (props) => {
 
   return (
     <Router>
-      <Header isAuth={isAuth} menuItems={menuItems} onLogout={onLogout} />
+      <Header user={user} userStatus={userStatus} onLogout={onLogout} />
       <Switch>
         <Route exact path={mainPath}>
-          {randonBlock}
-          <PersonsPage status={personsStatus} items={persons} getItem={getPerson} />
+          {randomBlock}
+          <PersonsPage
+            status={personsStatus}
+            items={persons}
+            getItem={getPerson}
+            sortType={personsSortType}
+            setSortType={setPersonsSortType}
+            sortField={personsSortField}
+            setSortField={setPersonsSortField}
+          />
         </Route>
         <Route exact path={`${AppPath.PLANETS}`}>
           <PlanetsPage status={planetsStatus} items={planets} />
@@ -99,7 +113,7 @@ const App: FC<P> = (props) => {
           <PlanetPage status={planetsStatus} items={planets} getItem={getPlanet} />
         </Route>
         <PrivateRoue isAuth={isAuth} exact={true} path={`${AppPath.STARSHIPS}:${IdName.STARSHIP}?`}>
-          {randonBlock}
+          {randomBlock}
           <StarshipsPage status={starshipsStatus} items={starships} getItem={getStarship} />
         </PrivateRoue>
         <PrivateRoue isAuth={isAuth} exact={true} path={AppPath.LOG_IN}>
@@ -121,7 +135,9 @@ const mapStateToProps = (state: Type.IState) => ({
   user: UserSelector.getUser(state),
   error: UserSelector.getError(state),
   personsStatus: PersonsSelector.getPersonsStatus(state),
-  persons: PersonsSelector.getPersons(state),
+  persons: PersonsSelector.getSordedPersons(state),
+  personsSortType: PersonsSelector.getPersonsSortType(state),
+  personsSortField: PersonsSelector.getPersonsSortField(state),
   getPerson: (id: Type.TId) => PersonsSelector.getPerson(state, id),
   planetsStatus: PlanetsSelector.getPlanetsStatus(state),
   planets: PlanetsSelector.getPlanets(state),
@@ -133,11 +149,17 @@ const mapStateToProps = (state: Type.IState) => ({
 
 
 const mapDispatchToPorops = (dispatch: Type.TDispatch) => ({
-  login: (authData: Type.IAuthData) => {
-    dispatch(loginAsync(authData));
+  onLogin: (authData: Type.IAuthData) => {
+    dispatch(UserOperation.loginAsync(authData));
   },
-  logout: () => {
-    dispatch(resetUser());
+  onLogout: () => {
+    dispatch(UserAction.resetUser());
+  },
+  setPersonsSortType: (sortType: string) => {
+    dispatch(PersonsAction.setPersonsSortType(sortType));
+  },
+  setPersonsSortField: (sortField: string) => {
+    dispatch(PersonsAction.setPersonsSortField(sortField));
   },
 });
 

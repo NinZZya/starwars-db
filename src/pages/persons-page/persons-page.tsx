@@ -7,7 +7,7 @@ import PersonDetails from '../../components/details/person-details';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { AppPath, LoadingStatus, IdName } from '../../const';
+import { AppPath, LoadingStatus, IdName, PersonSortFields } from '../../const';
 import { IPerson, TId } from '../../types';
 
 
@@ -15,6 +15,10 @@ interface P {
   status: LoadingStatus;
   items: IPerson[];
   getItem: (id: TId) => IPerson;
+  sortType: string;
+  setSortType: (sortType: string) => void;
+  sortField: string;
+  setSortField: (sortField: string) => void;
 }
 
 interface IParams {
@@ -72,6 +76,11 @@ const getListPersons = (props: P) => {
 }
 
 const PersonsPage: FC<P> = (props) => {
+  const {
+    sortType, setSortType,
+    sortField, setSortField,
+  } = props;
+
   const personsPath = `${AppPath.PERSONS}:${IdName.PERSON}`;
   const personsMatch: IMatch | null = useRouteMatch(personsPath);
   const activeId = personsMatch ?
@@ -83,7 +92,13 @@ const PersonsPage: FC<P> = (props) => {
 
   return (
     <>
-      <Sort />
+      <Sort
+        activeType={sortType}
+        activeField={sortField}
+        fields={PersonSortFields}
+        setSortType={setSortType}
+        setSortField={setSortField}
+      />
       <RowTwoCol
         first={listItems}
         second={itemsDetails}

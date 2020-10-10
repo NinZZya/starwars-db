@@ -1,6 +1,6 @@
-import { Dispatch, Action } from 'redux';
+import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { LoadingStatus, UserStatus } from './const';
+import { LoadingStatus, SortType, UserStatus } from './const';
 import NameSpace from './redux/name-space';
 import SwapiService from './services/swapi-service';
 
@@ -48,6 +48,7 @@ export interface IPlanets {
 }
 
 export interface IPerson {
+  [key: string]: string | number;
   id: TId;
   name: string;
   gender: string;
@@ -79,11 +80,11 @@ export interface IStarships {
 }
 
 export type TUserPayload = UserStatus | IUser | string | null;
-export type TPersonsPayload = LoadingStatus | IPersons;
-export type TPlanetsPayload = LoadingStatus | IPlanets;
-export type TStarshipsPayload = LoadingStatus | IStarships ;
+export type TPersonsPayload = LoadingStatus | IPersons | string;
+export type TPlanetsPayload = LoadingStatus | IPlanets | string;
+export type TStarshipsPayload = LoadingStatus | IStarships | string;
 
-export type TPayload = TUserPayload| TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
+export type TPayload = TUserPayload | TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
 
 
 export interface IUserState {
@@ -94,6 +95,8 @@ export interface IUserState {
 export interface IPersonsState {
   status: LoadingStatus;
   items: IPersons;
+  sortType: string;
+  sortField: string;
 };
 
 export interface IPlanetsState {

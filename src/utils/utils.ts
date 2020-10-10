@@ -1,3 +1,4 @@
+import { SortType } from '../const';
 import { TPayload } from '../types';
 
 
@@ -11,3 +12,23 @@ export const makeActionCreator = (type: string) => (payload?: TPayload) => ({
   type,
   payload,
 });
+
+export const sortingUp = <T>(a: T, b: T) => {
+  if (a > b) {
+    return 1;
+  }
+  if (a < b) {
+    return -1;
+  }
+  return 0;
+};
+
+export const sortingDown = <T>(a: T, b: T) => {
+  if (a < b) {
+    return 1;
+  }
+  if (a > b) {
+    return -1;
+  }
+  return 0;
+};
