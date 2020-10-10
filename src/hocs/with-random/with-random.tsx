@@ -1,28 +1,27 @@
 import React, { PureComponent } from 'react';
 import Spiner from '../../components/spiner';
+import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import ItemDetails from '../../components/details/item-details';
 import { LoadingStatus } from '../../const';
-import {
-  IPersons, IPlanets, IStarships, TId,
-} from '../../types';
+import * as Type from '../../types';
 
 
 type T = typeof ItemDetails;
+type TGetItem = Type.TGetPerson | Type.TGetPlanet | Type.TGetStarship;
 
 interface P {
   status: LoadingStatus;
-  items: IPlanets | IPersons | IStarships;
+  items: Type.IPerson[] | Type.IPlanet[] | Type.IStarship[];
 }
 
 interface S {
-  activeId: TId,
-  ids: TId[],
+  activeId: Type.TId,
 }
 
 const TIMEOUT = 5000;
 
-const withRandom = (Component: T, timeout: number = TIMEOUT) => {
+const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) => {
 
   class WithRandom extends PureComponent<P, S> {
     constructor(props: P) {
@@ -30,7 +29,6 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
 
       this.state = {
         activeId: '',
-        ids: [],
       };
     };
 
@@ -51,20 +49,15 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
 
     updateCard() {
       const { status, items } = this.props;
-      const { activeId, ids } = this.state;
+
+      if (!items.length) {
+        return;
+      }
 
       if (status === LoadingStatus.SUCCESS) {
-        if (activeId) {
-          this.setState({
-            activeId: ids[Math.floor(Math.random() * ids.length)],
-          });
-        } else {
-          const ids = Object.keys(items);
-          this.setState({
-            activeId: ids[Math.floor(Math.random() * ids.length)],
-            ids,
-          });
-        }
+        this.setState({
+          activeId: items[Math.floor(Math.random() * items.length)].id,
+        });
       }
     }
 
@@ -77,18 +70,16 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
         return null;
       }
 
-      const ids = Object.keys(items);
-
-      if (ids.length) {
-        const id = !activeId ? ids[0] : activeId;
-        return <Component item={items[id]} />;
+      if (items.length) {
+        const id = !activeId ? items[0].id : activeId;
+        return <Component item={getItem(id)} />;
       }
 
       if (this.interval) {
         clearInterval(this.interval);
       }
 
-      return <div>No data</div>;
+      return <Message title={"No data"} />;
     }
 
     render() {
@@ -114,5 +105,6 @@ const withRandom = (Component: T, timeout: number = TIMEOUT) => {
   }
   return WithRandom;
 };
+
 
 export default withRandom;

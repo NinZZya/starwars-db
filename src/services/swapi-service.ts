@@ -62,7 +62,7 @@ export default class SwapiService {
     const { login, password } = authData;
 
     await delay(DELAY_MS)
-    const user = users.find((item) => item.login === login);
+    const user = users.find((item) => item.login.toLowerCase() === login.toLowerCase());
 
     if (!user) {
       throw new Error(`User not found`);

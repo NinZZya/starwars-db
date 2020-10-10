@@ -1,6 +1,6 @@
-import { Dispatch, Action } from 'redux';
+import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { LoadingStatus, UserStatus } from './const';
+import { LoadingStatus, SortType, UserStatus } from './const';
 import NameSpace from './redux/name-space';
 import SwapiService from './services/swapi-service';
 
@@ -30,6 +30,7 @@ export interface IUser {
 export type TSwapiServices = typeof SwapiService;
 
 export interface IPlanet {
+  [key: string]: string | number;
   id: TId;
   name: string;
   population: string;
@@ -48,6 +49,7 @@ export interface IPlanets {
 }
 
 export interface IPerson {
+  [key: string]: string | number;
   id: TId;
   name: string;
   gender: string;
@@ -62,6 +64,7 @@ export interface IPersons {
 }
 
 export interface IStarship {
+  [key: string]: string | number;
   id: TId;
   name: string;
   model: string;
@@ -79,11 +82,11 @@ export interface IStarships {
 }
 
 export type TUserPayload = UserStatus | IUser | string | null;
-export type TPersonsPayload = LoadingStatus | IPersons;
-export type TPlanetsPayload = LoadingStatus | IPlanets;
-export type TStarshipsPayload = LoadingStatus | IStarships ;
+export type TPersonsPayload = LoadingStatus | IPersons | string;
+export type TPlanetsPayload = LoadingStatus | IPlanets | string;
+export type TStarshipsPayload = LoadingStatus | IStarships | string;
 
-export type TPayload = TUserPayload| TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
+export type TPayload = TUserPayload | TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
 
 
 export interface IUserState {
@@ -94,16 +97,22 @@ export interface IUserState {
 export interface IPersonsState {
   status: LoadingStatus;
   items: IPersons;
+  sortType: string;
+  sortField: string;
 };
 
 export interface IPlanetsState {
   status: LoadingStatus;
   items: IPlanets;
+  sortType: string;
+  sortField: string;
 };
 
 export interface IStarshipsState {
   status: LoadingStatus;
   items: IStarships;
+  sortType: string;
+  sortField: string;
 };
 
 export interface IState {
@@ -114,3 +123,7 @@ export interface IState {
 };
 
 export type TDispatch = ThunkDispatch<IState, TSwapiServices, Action>;
+
+export type TGetPerson = (id: TId) => IPerson;
+export type TGetPlanet = (id: TId) => IPlanet;
+export type TGetStarship = (id: TId) => IStarship;

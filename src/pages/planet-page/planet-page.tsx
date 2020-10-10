@@ -4,12 +4,13 @@ import PlanetDeils from '../../components/details/planet-details';
 import Spiner from '../../components/spiner';
 import ErrorMessage from '../../components/messages/error-message';
 import { AppPath, LoadingStatus, IdName } from '../../const';
-import { IPlanets } from '../../types';
+import * as Type from '../../types';
 
 
 interface P {
   status: LoadingStatus,
-  items: IPlanets,
+  items: Type.IPlanet[],
+  getItem: Type.TGetPlanet;
 }
 
 interface IParams {
@@ -22,7 +23,7 @@ interface IMatch {
 
 
 const PlanetPage: FC<P> = (props) => {
-  const { status, items: planets } = props;
+  const { status, items: planets, getItem } = props;
 
   if (status === LoadingStatus.LOADING) {
     return <Spiner />;
@@ -32,7 +33,7 @@ const PlanetPage: FC<P> = (props) => {
     return <ErrorMessage />;
   }
 
-  const planetsCount = Object.values(planets).length;
+  const planetsCount = planets.length;
 
   const planetsPath = `${AppPath.PLANETS}:${IdName.PLANET}`;
   const planetsMatch: IMatch | null = useRouteMatch(planetsPath);
@@ -40,7 +41,7 @@ const PlanetPage: FC<P> = (props) => {
     planetsMatch.params[IdName.PLANET] :
     '';
 
-  const planet = planets[activeId];
+  const planet = getItem(activeId);
 
   const isNotFound = (status === LoadingStatus.SUCCESS) && (!planetsCount || !planet);
 

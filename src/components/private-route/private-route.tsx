@@ -5,13 +5,14 @@ import { AppPath } from '../../const';
 
 interface P {
   isAuth: boolean;
-  exact: boolean;
+  exact?: boolean | undefined;
   path: string;
   children?: ReactNode;
 }
 
 const PrivateRoue: FC<P> = (props) => {
-  const { isAuth, path, exact, children } = props;
+  const { isAuth, path, children } = props;
+  const exact = !!props.exact;
 
   if (isAuth && path === AppPath.LOG_IN) {
     return <Redirect to={AppPath.ROOT} />;

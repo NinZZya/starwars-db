@@ -9,6 +9,7 @@ interface P {
 const ItemDetails: FC<P> = (props) => {
   const { item, children } = props;
   const { image, name } = item;
+
   return (
     <div className="item-details card">
       {image ? (

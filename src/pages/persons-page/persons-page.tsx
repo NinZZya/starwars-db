@@ -1,18 +1,24 @@
 import React, { FC } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import RowTwoCol from '../../components/rows/row-two-col';
+import Sort from '../../components/sort';
 import ListElements from '../../components/list-elements';
 import PersonDetails from '../../components/details/person-details';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { AppPath, LoadingStatus, IdName } from '../../const';
-import { IPersons, TId } from '../../types';
+import { AppPath, LoadingStatus, IdName, PersonSortFields } from '../../const';
+import { IPerson, TId } from '../../types';
 
 
 interface P {
-  status: LoadingStatus,
-  items: IPersons,
+  status: LoadingStatus;
+  items: IPerson[];
+  getItem: (id: TId) => IPerson;
+  sortType: string;
+  setSortType: (sortType: string) => void;
+  sortField: string;
+  setSortField: (sortField: string) => void;
 }
 
 interface IParams {
@@ -23,10 +29,30 @@ interface IMatch {
   params: IParams;
 }
 
+const SORT_FIELDS_KEYS = Object.keys(PersonSortFields);
+const LAST_FIELD_INDEX = SORT_FIELDS_KEYS.length - 2;
+
+const renderItem = (item: IPerson) => (
+  <Link to={`${AppPath.PERSONS}${item.id}`}>
+    <p className="h4">{item.name}</p>
+    ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
+      <span key={`${key}-${index}`}>
+        <small>
+          {`${PersonSortFields[key]}: ${item[key]}
+            ${index !== LAST_FIELD_INDEX ?
+            ', ' :
+            ''
+          }`}
+        </small>
+      </span>
+    ))})
+  </Link>
+);
+
 const getItemDetails = (props: P, activeId: TId) => {
-  const { status, items: persons } = props;
+  const { status, items: persons, getItem } = props;
   const isNull = (status === LoadingStatus.LOADING) ||
-    !Object.values(props.items).length;
+    !persons.length;
 
   if (isNull) {
     return null;
@@ -36,7 +62,7 @@ const getItemDetails = (props: P, activeId: TId) => {
     return <Message title={"Select person"} />;
   }
 
-  const person = persons[activeId];
+  const person = getItem(activeId);
 
   if (!person) {
     return <Message title={"No data"} />;
@@ -47,7 +73,7 @@ const getItemDetails = (props: P, activeId: TId) => {
 
 
 const getListPersons = (props: P) => {
-  const { status } = props;
+  const { status, items: persons } = props;
 
   if (status === LoadingStatus.LOADING) {
     return <Spiner />;
@@ -57,8 +83,6 @@ const getListPersons = (props: P) => {
     return <ErrorMessage />;
   }
 
-  const persons = Object.values(props.items);
-
   if (!persons.length) {
     <Message title={"No data"} />
   }
@@ -66,12 +90,18 @@ const getListPersons = (props: P) => {
   return (
     <ListElements
       items={persons}
-      path={AppPath.PERSONS}
+      renderItem={renderItem}
+      // path={AppPath.PERSONS}
     />
   );
 }
 
 const PersonsPage: FC<P> = (props) => {
+  const {
+    sortType, setSortType,
+    sortField, setSortField,
+  } = props;
+
   const personsPath = `${AppPath.PERSONS}:${IdName.PERSON}`;
   const personsMatch: IMatch | null = useRouteMatch(personsPath);
   const activeId = personsMatch ?
@@ -83,6 +113,13 @@ const PersonsPage: FC<P> = (props) => {
 
   return (
     <>
+      <Sort
+        activeType={sortType}
+        activeField={sortField}
+        fields={PersonSortFields}
+        setSortType={setSortType}
+        setSortField={setSortField}
+      />
       <RowTwoCol
         first={listItems}
         second={itemsDetails}

@@ -1,35 +1,31 @@
-import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { TId } from '../../types';
-import { AppPath } from 'const';
+import React, { FC, ReactNode } from 'react';
 
 
-interface TItem {
-  id: TId;
-  name: string;
-};
+type TI= Array<ReactNode>;
+type TF = (item?: any) => ReactNode;
 
 interface P {
-  items: Array<TItem>,
-  path: AppPath;
+  items: TI,
+  renderItem?: TF | undefined;
 }
 
+const renderItems = (items: TI, renderItem?: TF) => items.map((item, index) => (
+  <li
+    key={`list-element-${index}`}
+  >
+    <div className="list-group-item">
+      {renderItem ? renderItem(item) : item}
+    </div>
+  </li>
+))
+
 const ListElements: FC<P> = (props) => {
-  const { items, path } = props;
+  const { items, renderItem } = props;
 
   return (
-    <div className="item-list list-group">
-      {items.map((item: TItem) => (
-        <Link
-          to={`${path}${item.id}`}
-          key={`list-element-${item.id}`}
-        >
-          <div className="list-group-item">
-              {item.name}
-          </div>
-        </Link>
-      ))}
-    </div>
+    <ul className="item-list list-group">
+      {renderItems(items, renderItem)}
+    </ul>
   );
 };
 

@@ -1,49 +1,78 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Sort from '../../components/sort';
 import ListElements from '../../components/list-elements';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { getPlanets, getPlanetsStatus } from '../../redux/planets/planets-selectors';
-import { AppPath, LoadingStatus } from '../../const';
-import { IPlanets, IState } from '../../types';
+import { AppPath, LoadingStatus, PlanetsSortFields } from '../../const';
+import * as Type from '../../types';
 
 
 interface P {
-  planetsStatus: LoadingStatus,
-  planets: IPlanets,
+  status: LoadingStatus,
+  items: Type.IPlanet[],
+  sortType: string;
+  setSortType: (sortType: string) => void;
+  sortField: string;
+  setSortField: (sortFiled: string) => void;
 }
 
+const SORT_FIELDS_KEYS = Object.keys(PlanetsSortFields);
+const LAST_FIELD_INDEX = SORT_FIELDS_KEYS.length - 2;
+
+const renderItem = (item: Type.IPlanet) => (
+  <Link to={`${AppPath.PLANETS}${item.id}`}>
+    <p className="h4">{item.name} </p>
+    ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
+      <span key={`${key}-${index}`}>
+        <small>
+          {`${PlanetsSortFields[key]}: ${item[key]}
+            ${index !== LAST_FIELD_INDEX ?
+            ', ' :
+            ''
+          }`}
+        </small>
+      </span>
+    ))})
+  </Link>
+);
+
 const PlanetsPage: FC<P> = (props) => {
-  const { planetsStatus } = props;
-  if (planetsStatus === LoadingStatus.LOADING) {
+  const {
+    status, items: planets,
+    sortType, setSortType,
+    sortField, setSortField,
+  } = props;
+
+  if (status === LoadingStatus.LOADING) {
     return <Spiner />;
   }
 
-  if (planetsStatus === LoadingStatus.ERROR) {
+  if (status === LoadingStatus.ERROR) {
     return <ErrorMessage />;
   }
-
-  const planets = Object.values(props.planets);
 
   if (!planets.length) {
     return <Message title={"No data"} />
   }
 
   return (
-    <ListElements
-      items={planets}
-      path={AppPath.PLANETS}
-    />
+    <>
+      <Sort
+        fields={PlanetsSortFields}
+        activeType={sortType}
+        setSortType={setSortType}
+        activeField={sortField}
+        setSortField={setSortField}
+      />
+      <ListElements
+        items={planets}
+        renderItem={renderItem}
+      />
+    </>
   );
 };
 
 
-const mapStateToProps = (state: IState) => ({
-  planetsStatus: getPlanetsStatus(state),
-  planets: getPlanets(state),
-});
-
-
-export { PlanetsPage };
-export default connect(mapStateToProps)(PlanetsPage);
+export default PlanetsPage;

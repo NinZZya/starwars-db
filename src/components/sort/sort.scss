@@ -1,0 +1,23 @@
+.sort {
+  margin: 1rem 0;
+  align-items: center;
+}
+
+.sort-btn-group {
+  margin-left: 2rem;
+}
+
+.sort-fields .btn {
+  display: flex;
+  width: 150px;
+  text-align: left;
+
+  &::after {
+    margin-top: 10px;
+    margin-left: auto;
+  }
+}
+
+.sort-label {
+  margin-right: 1rem;
+}

@@ -1,7 +1,9 @@
 import StarshipsType from './starships-types';
-import { LoadingStatus } from '../../const';
+import { LoadingStatus, SortType, StarshipsSortFields } from '../../const';
 import { TPlanetsPayload } from '../../types';
 
+
+const DEFAULT_FIELD = Object.keys(StarshipsSortFields)[0];
 
 interface IAction {
   type: StarshipsType;
@@ -11,6 +13,8 @@ interface IAction {
 const initialState = {
   status: LoadingStatus.LOADING,
   items: {},
+  sortType: SortType.UP,
+  sortField: DEFAULT_FIELD,
 };
 
 
@@ -25,6 +29,16 @@ export default (state = initialState, action: IAction) => {
       return {
         ...state,
         items: action.payload,
+      };
+    case StarshipsType.SET_STARSHIPS_SORT_TYPE:
+      return {
+        ...state,
+        sortType: action.payload,
+      };
+    case StarshipsType.SET_STARSHIPS_SORT_FIELD:
+      return {
+        ...state,
+        sortField: action.payload,
       };
     default:
       return state;
