@@ -31,12 +31,12 @@ export const menuItems = [
   { name: 'Starships', path: AppPath.STARSHIPS },
 ];
 
-export const SortType: {[key: string]: string} =  {
+export const SortType: { [key: string]: string } = {
   UP: '▲',
   DOWN: '▼',
 }
 
-export const PersonFields: {[key: string]: string} = {
+export const PersonFields: { [key: string]: string } = {
   name: 'Name',
   gender: 'Gender',
   birthYear: 'Birth Year',
@@ -44,8 +44,29 @@ export const PersonFields: {[key: string]: string} = {
   mass: 'Mass',
 };
 
-export const PersonSortFields: {[key: string]: string} = {
+export const PersonSortFields: { [key: string]: string } = {
   name: 'Name',
   height: 'Height',
   mass: 'Mass',
+};
+
+export const PlanetsFields: { [key: string]: string } = {
+  name: 'Name',
+  population: 'Population',
+  rotationPeriod: 'Rotation Period',
+  orbitalPeriod: 'Orbital Period',
+  diameter: 'Diameter',
+  climate: 'Climate',
+  gravity: 'Gravity',
+  surfaceWater: 'Surface Water',
+  terrain: 'Terrain',
+};
+
+export const PlanetsSortFields: { [key: string]: string } = {
+  name: 'Name',
+  population: 'Population',
+  rotationPeriod: 'Rotation Period',
+  orbitalPeriod: 'Orbital Period',
+  diameter: 'Diameter',
+  surfaceWater: 'Surface Water',
 };
