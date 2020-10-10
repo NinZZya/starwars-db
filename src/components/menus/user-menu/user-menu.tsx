@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withActiveFlag from '../../../hocs/with-active-flag';
-import * as UserSelector from '../../../redux/user/user-selectors';
-import { resetUser } from '../../../redux/user/user-actions';
 import * as Type from '../../../types';
 import { AppPath, UserStatus } from '../../../const';
 
@@ -11,15 +8,15 @@ import { AppPath, UserStatus } from '../../../const';
 interface P {
   isActive?: boolean;
   onActiveChange?: () => void;
-  userStatus?: UserStatus;
-  user?: Type.IUser;
-  logout?: () => void;
+  userStatus: UserStatus;
+  user: Type.IUser;
+  onLogout: () => void;
 }
 
 const UserMenu: FC<P> = (props) => {
   const {
     isActive, onActiveChange,
-    user, userStatus, logout: onLogout
+    user, userStatus, onLogout
   } = props;
 
   const isAuth = userStatus === UserStatus.AUTH && user !== null;
@@ -61,20 +58,4 @@ const UserMenu: FC<P> = (props) => {
   );
 };
 
-const mapStateToProps = (state: Type.IState) => ({
-  userStatus: UserSelector.getUserStatus(state),
-  user: UserSelector.getUser(state),
-});
-
-
-const mapDispatchToPorops = (dispatch: Type.TDispatch) => ({
-  logout: () => {
-    dispatch(resetUser());
-  },
-});
-
-
-export { UserMenu };
-export default withActiveFlag<P>(
-  connect(mapStateToProps, mapDispatchToPorops)(UserMenu)
-);
+export default withActiveFlag<P>(UserMenu);
