@@ -37,6 +37,7 @@ export enum SortType {
 }
 
 export const personFields = [
+  { field: 'name', label: 'Name' },
   { field: 'gender', label: 'Gender' },
   { field: 'birthYear', label: 'Birth Year' },
   { field: 'height', label: 'Height' },

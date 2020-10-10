@@ -9,16 +9,20 @@ interface P {
   item: IItem
 }
 
+// Without name field
+const fields = personFields.slice(1, personFields.length);
+
 const PersonDetails: FC<P> = (props) => {
   const { item } = props;
 
   return (
     <ItemDetails item={item} >
-      {personFields.map((item) => (
+      {fields.map((item) => (
         <ItemDetail field={item.field} label={`${item.label}:`} key={item.field} />
       ))}
     </ItemDetails>
   );
 };
+
 
 export default PersonDetails;
