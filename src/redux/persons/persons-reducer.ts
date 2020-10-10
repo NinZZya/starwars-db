@@ -1,9 +1,9 @@
 import PersonsType from './persons-types';
 import { TPersonsPayload } from '../../types';
-import { LoadingStatus, SortType, PersonFields } from '../../const';
+import { LoadingStatus, SortType, PersonSortFields } from '../../const';
 
 
-const DEFAULT_FIELD = Object.keys(PersonFields)[0];
+const DEFAULT_FIELD = Object.keys(PersonSortFields)[0];
 
 interface IAction {
   type: PersonsType;
