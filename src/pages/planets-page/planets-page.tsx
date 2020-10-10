@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 import Sort from '../../components/sort';
 import ListElements from '../../components/list-elements';
 import Spiner from '../../components/spiner';
@@ -16,6 +17,26 @@ interface P {
   sortField: string;
   setSortField: (sortFiled: string) => void;
 }
+
+const SORT_FIELDS_KEYS = Object.keys(PlanetsSortFields);
+const LAST_FIELD_INDEX = SORT_FIELDS_KEYS.length - 2;
+
+const renderItem = (item: Type.IPlanet) => (
+  <Link to={`${AppPath.PLANETS}${item.id}`}>
+    <p className="h4">{item.name} </p>
+    ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
+      <span key={`${key}-${index}`}>
+        <small>
+          {`${PlanetsSortFields[key]}: ${item[key]}
+            ${index !== LAST_FIELD_INDEX ?
+            ', ' :
+            ''
+          }`}
+        </small>
+      </span>
+    ))})
+  </Link>
+);
 
 const PlanetsPage: FC<P> = (props) => {
   const {
@@ -47,7 +68,7 @@ const PlanetsPage: FC<P> = (props) => {
       />
       <ListElements
         items={planets}
-        path={AppPath.PLANETS}
+        renderItem={renderItem}
       />
     </>
   );

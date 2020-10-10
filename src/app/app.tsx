@@ -85,6 +85,7 @@ const App: FC<P> = (props) => {
   ];
 
   const isAuth = (userStatus === UserStatus.AUTH) && (user !== null);
+
   const RadomPerson = withRandom(PersonDetails, getPerson);
   const RadomPlanet = withRandom(PlanetDetails, getPlanet, 6500);
   const RadomStarship = withRandom(StarshipDetails, getStarship,  8000);

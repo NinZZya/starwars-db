@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Sort from '../../components/sort';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import RowTwoCol from '../../components/rows/row-two-col';
 import ListElements from '../../components/list-elements';
 import StarshipDetails from '../../components/details/starship-details';
@@ -29,6 +29,26 @@ interface IMatch {
   params: IParams;
 }
 
+const SORT_FIELDS_KEYS = Object.keys(StarshipsSortFields);
+const LAST_FIELD_INDEX = SORT_FIELDS_KEYS.length - 2;
+
+const renderItem = (item: Type.IStarship) => (
+  <Link to={`${AppPath.STARSHIPS}${item.id}`}>
+    <p className="h4">{item.name}</p>
+    ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
+      <span key={`${key}-${index}`}>
+        <small>
+          {`${StarshipsSortFields[key]}: ${item[key]}
+            ${index !== LAST_FIELD_INDEX ?
+            ', ' :
+            ''
+          }`}
+        </small>
+      </span>
+    ))})
+  </Link>
+);
+
 const getItemDetails = (props: P, activeId: Type.TId) => {
   const { status, items: starships, getItem } = props;
   const isNull = (status === LoadingStatus.LOADING) ||
@@ -39,7 +59,7 @@ const getItemDetails = (props: P, activeId: Type.TId) => {
   }
 
   if (!activeId) {
-    return <div>Select straship</div>;
+    return <Message title={"Select straship"} />;
   }
 
   const starship = getItem(activeId);
@@ -70,7 +90,7 @@ const getListPersons = (props: P) => {
   return (
     <ListElements
       items={starships}
-      path={AppPath.STARSHIPS}
+      renderItem={renderItem}
     />
   );
 }

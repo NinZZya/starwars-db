@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import RowTwoCol from '../../components/rows/row-two-col';
 import Sort from '../../components/sort';
 import ListElements from '../../components/list-elements';
@@ -28,6 +28,26 @@ interface IParams {
 interface IMatch {
   params: IParams;
 }
+
+const SORT_FIELDS_KEYS = Object.keys(PersonSortFields);
+const LAST_FIELD_INDEX = SORT_FIELDS_KEYS.length - 2;
+
+const renderItem = (item: IPerson) => (
+  <Link to={`${AppPath.PERSONS}${item.id}`}>
+    <p className="h4">{item.name}</p>
+    ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
+      <span key={`${key}-${index}`}>
+        <small>
+          {`${PersonSortFields[key]}: ${item[key]}
+            ${index !== LAST_FIELD_INDEX ?
+            ', ' :
+            ''
+          }`}
+        </small>
+      </span>
+    ))})
+  </Link>
+);
 
 const getItemDetails = (props: P, activeId: TId) => {
   const { status, items: persons, getItem } = props;
@@ -70,7 +90,8 @@ const getListPersons = (props: P) => {
   return (
     <ListElements
       items={persons}
-      path={AppPath.PERSONS}
+      renderItem={renderItem}
+      // path={AppPath.PERSONS}
     />
   );
 }

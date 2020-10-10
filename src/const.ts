@@ -64,7 +64,6 @@ export const PlanetsFields: { [key: string]: string } = {
 
 export const PlanetsSortFields: { [key: string]: string } = {
   name: 'Name',
-  population: 'Population',
   rotationPeriod: 'Rotation Period',
   orbitalPeriod: 'Orbital Period',
   diameter: 'Diameter',
