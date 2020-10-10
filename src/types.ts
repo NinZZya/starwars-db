@@ -64,6 +64,7 @@ export interface IPersons {
 }
 
 export interface IStarship {
+  [key: string]: string | number;
   id: TId;
   name: string;
   model: string;
@@ -110,6 +111,8 @@ export interface IPlanetsState {
 export interface IStarshipsState {
   status: LoadingStatus;
   items: IStarships;
+  sortType: string;
+  sortField: string;
 };
 
 export interface IState {

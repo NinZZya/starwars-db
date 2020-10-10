@@ -70,3 +70,14 @@ export const PlanetsSortFields: { [key: string]: string } = {
   diameter: 'Diameter',
   surfaceWater: 'Surface Water',
 };
+
+export const StarshipsSortFields: { [key: string]: string } = {
+  name: 'Name',
+  model: 'Model',
+  manufacturer: 'Manufacturer',
+  costInCredits: 'Cost In Credits',
+  length: 'Length',
+  crew: 'Crew',
+  passengers: 'Passengers',
+  cargoCapacity: 'Cargo Capacity',
+};

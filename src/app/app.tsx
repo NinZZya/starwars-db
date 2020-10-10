@@ -26,9 +26,10 @@ import * as PersonsAction from '../redux/persons/persons-actions';
 import * as PersonsSelector from '../redux/persons/persons-selectors';
 import * as PlanetsAction from '../redux/planets/planets-actions';
 import * as PlanetsSelector from '../redux/planets/planets-selectors';
+import * as StarshipsAction from '../redux/starships/starships-actions';
 import * as StarshipsSelector from '../redux/starships/starships-selectors';
 import * as Type from '../types';
-import { AppPath, IdName, LoadingStatus, SortType, UserStatus } from '../const';
+import { AppPath, IdName, LoadingStatus, UserStatus } from '../const';
 
 
 
@@ -53,6 +54,10 @@ interface P {
   starshipsStatus: LoadingStatus;
   starships: Type.IStarship[];
   getStarship: Type.TGetStarship;
+  starshipsSortType: string;
+  setStarshipsSortType: (sortType: string) => void;
+  starshipsSortField: string;
+  setStarshipsSortField: (sortFiled: string) => void;
   onLogin: (authData: Type.IAuthData) => void;
   onLogout: () => void;
 }
@@ -68,6 +73,8 @@ const App: FC<P> = (props) => {
     planetsSortType, setPlanetsSortType,
     planetsSortField, setPlanetsSortField,
     starshipsStatus, starships, getStarship,
+    starshipsSortType, setStarshipsSortType,
+    starshipsSortField, setStarshipsSortField,
     userStatus, user, error,
     onLogin, onLogout,
   } = props;
@@ -130,11 +137,19 @@ const App: FC<P> = (props) => {
             getItem={getPlanet}
           />
         </Route>
-        <PrivateRoue isAuth={isAuth} exact={true} path={`${AppPath.STARSHIPS}:${IdName.STARSHIP}?`}>
+        <PrivateRoue isAuth={isAuth} path={`${AppPath.STARSHIPS}:${IdName.STARSHIP}?`}>
           {randomBlock}
-          <StarshipsPage status={starshipsStatus} items={starships} getItem={getStarship} />
+          <StarshipsPage
+            status={starshipsStatus}
+            items={starships}
+            getItem={getStarship}
+            sortType={starshipsSortType}
+            setSortType={setStarshipsSortType}
+            sortField={starshipsSortField}
+            setSortField={setStarshipsSortField}
+          />
         </PrivateRoue>
-        <PrivateRoue isAuth={isAuth} exact={true} path={AppPath.LOG_IN}>
+        <PrivateRoue isAuth={isAuth} exact path={AppPath.LOG_IN}>
           <LoginPage
             isError={userStatus === UserStatus.AUTH_ERROR}
             error={error}
@@ -163,7 +178,9 @@ const mapStateToProps = (state: Type.IState) => ({
   planetsSortField: PlanetsSelector.getPlanetsSortField(state),
   getPlanet: (id: Type.TId) => PlanetsSelector.getPlanet(state, id),
   starshipsStatus: StarshipsSelector.getStarshipsStatus(state),
-  starships: StarshipsSelector.getStarships(state),
+  starships: StarshipsSelector.getSortedStarships(state),
+  starshipsSortType: StarshipsSelector.getStarshipsSortType(state),
+  starshipsSortField: StarshipsSelector.getStarshipsSortField(state),
   getStarship: (id: Type.TId) => StarshipsSelector.getStarship(state, id),
 });
 
@@ -186,6 +203,12 @@ const mapDispatchToPorops = (dispatch: Type.TDispatch) => ({
   },
   setPlanetsSortField: (sortField: string) => {
     dispatch(PlanetsAction.setPlanetsSortField(sortField));
+  },
+  setStarshipsSortType: (sortType: string) => {
+    dispatch(StarshipsAction.setStarshipsSortType(sortType));
+  },
+  setStarshipsSortField: (sortField: string) => {
+    dispatch(StarshipsAction.setStarshipsSortField(sortField));
   },
 });
 

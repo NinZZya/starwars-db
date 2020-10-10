@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import Sort from '../../components/sort';
 import { useRouteMatch } from 'react-router-dom';
 import RowTwoCol from '../../components/rows/row-two-col';
 import ListElements from '../../components/list-elements';
@@ -6,7 +7,7 @@ import StarshipDetails from '../../components/details/starship-details';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { AppPath, LoadingStatus, IdName } from '../../const';
+import { AppPath, LoadingStatus, IdName, StarshipsSortFields } from '../../const';
 import * as Type from '../../types';
 
 
@@ -14,6 +15,10 @@ interface P {
   status: LoadingStatus;
   items: Type.IStarship[];
   getItem: Type.TGetStarship;
+  sortType: string;
+  setSortType: (sortType: string) => void;
+  sortField: string;
+  setSortField: (sortFiled: string) => void;
 }
 
 interface IParams {
@@ -71,6 +76,11 @@ const getListPersons = (props: P) => {
 }
 
 const StarshipsPage: FC<P> = (props) => {
+  const {
+    sortType, setSortType,
+    sortField, setSortField,
+  } = props;
+
   const starshipsPath = `${AppPath.STARSHIPS}:${IdName.STARSHIP}`;
   const starshipMatch: IMatch | null = useRouteMatch(starshipsPath);
   const activeId = starshipMatch ?
@@ -82,6 +92,13 @@ const StarshipsPage: FC<P> = (props) => {
 
   return (
     <>
+      <Sort
+        fields={StarshipsSortFields}
+        activeType={sortType}
+        setSortType={setSortType}
+        activeField={sortField}
+        setSortField={setSortField}
+      />
       <RowTwoCol
         first={listItems}
         second={itemsDetails}

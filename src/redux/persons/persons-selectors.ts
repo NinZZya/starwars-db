@@ -26,6 +26,6 @@ export const getSordedPersons = createSelector(
       return persons.sort((a, b) => sortingUp<string | number>(a[sortField], b[sortField]));
     }
 
-    return persons.sort((a, b) => sortingDown<string | number>(a.name, b.name));
+    return persons.sort((a, b) => sortingDown<string | number>(a[sortField], b[sortField]));
   }
 );

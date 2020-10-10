@@ -24,9 +24,9 @@ export const getSortedPlanets = createSelector(
     }
 
     if (sortType === SortType.UP) {
-      return planets.sort((a, b: any) => sortingUp<string | number>(a[sortField], b[sortField]));
+      return planets.sort((a, b) => sortingUp<string | number>(a[sortField], b[sortField]));
     }
 
-    return planets.sort((a, b) => sortingDown<string | number>(a.name, b.name));
+    return planets.sort((a, b) => sortingDown<string | number>(a[sortField], b[sortField]));
   }
 );
