@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import ItemDetails from '../item-details';
 import ItemDetail from '../item-details/components/item-detail';
 import { IItem } from '../../../types';
+import { personFields } from '../../../const';
 
 
 interface P {
@@ -13,10 +14,9 @@ const PersonDetails: FC<P> = (props) => {
 
   return (
     <ItemDetails item={item} >
-      <ItemDetail field="gender" label="Gender:" />
-      <ItemDetail field="birthYear" label="Birth Year:" />
-      <ItemDetail field="height" label="Height:" />
-      <ItemDetail field="mass" label="Mass:" />
+      {personFields.map((item) => (
+        <ItemDetail field={item.field} label={`${item.label}:`} key={item.field} />
+      ))}
     </ItemDetails>
   );
 };
