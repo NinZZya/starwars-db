@@ -17,14 +17,13 @@ export const getSordedPersons = createSelector(
   getPersons,
   getPersonsSortType,
   getPersonsSortField,
-  (persons, sortType, sortField: string) => {
+  (persons, sortType, sortField) => {
     if (!persons.length) {
       return [];
     }
 
-
     if (sortType === SortType.UP) {
-      return persons.sort((a, b: any) => sortingUp<string | number>(a[sortField], b[sortField]));
+      return persons.sort((a, b) => sortingUp<string | number>(a[sortField], b[sortField]));
     }
 
     return persons.sort((a, b) => sortingDown<string | number>(a.name, b.name));
