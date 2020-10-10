@@ -30,6 +30,7 @@ export interface IUser {
 export type TSwapiServices = typeof SwapiService;
 
 export interface IPlanet {
+  [key: string]: string | number;
   id: TId;
   name: string;
   population: string;
@@ -102,6 +103,8 @@ export interface IPersonsState {
 export interface IPlanetsState {
   status: LoadingStatus;
   items: IPlanets;
+  sortType: string;
+  sortField: string;
 };
 
 export interface IStarshipsState {
