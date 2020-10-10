@@ -26,12 +26,19 @@ export enum IdName {
 }
 
 export const menuItems = [
-  {name: 'People', path: AppPath.PERSONS},
-  {name: 'Planets', path: AppPath.PLANETS},
-  {name: 'Starships', path: AppPath.STARSHIPS},
+  { name: 'People', path: AppPath.PERSONS },
+  { name: 'Planets', path: AppPath.PLANETS },
+  { name: 'Starships', path: AppPath.STARSHIPS },
 ];
 
 export enum SortType {
   UP = 'UP',
   DOWN = 'DOWN',
 }
+
+export const personFields = [
+  { field: 'gender', label: 'Gender' },
+  { field: 'birthYear', label: 'Birth Year' },
+  { field: 'height', label: 'Height' },
+  { field: 'mass', label: 'Mass' },
+];
