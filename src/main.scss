@@ -7,6 +7,9 @@
 @import 'components/error-boundry/error-boundry.scss';
 @import 'components/header/header.scss';
 @import 'components/list-elements/list-elements.scss';
+@import 'components/logo/logo.scss';
+@import 'components/menus/horizontal-menu/horizontal-menu.scss';
+@import 'components/menus/user-menu/user-menu.scss';
 @import 'components/messages/error-message/error-message.scss';
 @import 'components/messages/message/message.scss';
 @import 'components/messages/not-found-message/not-found-message.scss';
@@ -16,6 +19,7 @@
 @import 'components/sort/sort.scss';
 @import 'components/spiner/spiner.scss';
 
+@import 'hocs/with-active-flag/with-active-flag.scss';
 @import 'hocs/with-random/with-random.scss';
 
 @import 'pages/login-page/login-page.scss';
