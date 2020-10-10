@@ -22,7 +22,7 @@ const UserMenu: FC<P> = (props) => {
     user, userStatus, logout: onLogout
   } = props;
 
-  const isAuth = userStatus === UserStatus.AUTH;
+  const isAuth = userStatus === UserStatus.AUTH && user !== null;
 
   return (
     <div className="user-menu">
