@@ -64,13 +64,10 @@ const getListPersons = (props: P) => {
   }
 
   return (
-    <>
-      <Sort />
-      <ListElements
-        items={persons}
-        path={AppPath.PERSONS}
-      />
-    </>
+    <ListElements
+      items={persons}
+      path={AppPath.PERSONS}
+    />
   );
 }
 
@@ -86,6 +83,7 @@ const PersonsPage: FC<P> = (props) => {
 
   return (
     <>
+      <Sort />
       <RowTwoCol
         first={listItems}
         second={itemsDetails}
