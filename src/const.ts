@@ -31,15 +31,21 @@ export const menuItems = [
   { name: 'Starships', path: AppPath.STARSHIPS },
 ];
 
-export enum SortType {
-  UP = 'UP',
-  DOWN = 'DOWN',
+export const SortType: {[key: string]: string} =  {
+  UP: '▲',
+  DOWN: '▼',
 }
 
-export const personFields = [
-  { field: 'name', label: 'Name' },
-  { field: 'gender', label: 'Gender' },
-  { field: 'birthYear', label: 'Birth Year' },
-  { field: 'height', label: 'Height' },
-  { field: 'mass', label: 'Mass' },
-];
+export const PersonFields: {[key: string]: string} = {
+  name: 'Name',
+  gender: 'Gender',
+  birthYear: 'Birth Year',
+  height: 'Height',
+  mass: 'Mass',
+};
+
+export const PersonSortFields: {[key: string]: string} = {
+  name: 'Name',
+  height: 'Height',
+  mass: 'Mass',
+};
