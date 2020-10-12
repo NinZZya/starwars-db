@@ -107,6 +107,12 @@ export default class SwapiService {
     return SwapiService.adaptPerson(responce);
   }
 
+  static async getPersonComments(id: TId) {
+    await delay(DELAY_MS);
+    const presonComments = comments.persons[id];
+    return presonComments ? presonComments: [];
+  }
+
   static async getPlanets() {
     const responce = await this.getResource(Url.PLANETS);
     const planets = responce.results.reduce((map: IPlanets, planet: IRPlanet) => {

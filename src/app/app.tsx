@@ -23,6 +23,7 @@ import * as UserAction from '../redux/user/user-actions';
 import * as UserOperation from '../redux/user/user-operations';
 import * as UserSelector from '../redux/user/user-selectors';
 import * as PersonsAction from '../redux/persons/persons-actions';
+import * as PersonsOperation from '../redux/persons/persons-operations';
 import * as PersonsSelector from '../redux/persons/persons-selectors';
 import * as PlanetsAction from '../redux/planets/planets-actions';
 import * as PlanetsSelector from '../redux/planets/planets-selectors';
@@ -41,6 +42,9 @@ interface P {
   personsStatus: LoadingStatus;
   persons: Type.IPerson[];
   getPerson: (id: Type.TId) => Type.IPerson;
+  personCommentsStatus: LoadingStatus | null;
+  personComments: Type.IComment[];
+  loadPersonComments: (id: Type.TId) => void;
   personsSortType: string;
   setPersonsSortType: (sortType: string) => void;
   personsSortField: string;
@@ -59,7 +63,7 @@ interface P {
   setStarshipsSortType: (sortType: string) => void;
   starshipsSortField: string;
   setStarshipsSortField: (sortFiled: string) => void;
-  loadStarshipsAsync: () => void;
+  loadStarships: () => void;
   onLogin: (authData: Type.IAuthData) => void;
   onLogout: () => void;
 }
@@ -73,7 +77,7 @@ class App extends PureComponent<P> {
 
   componentDidUpdate() {
     const {
-      loadStarshipsAsync,
+      loadStarships,
       starshipsStatus,
       userStatus, user,
     } = this.props;
@@ -85,13 +89,14 @@ class App extends PureComponent<P> {
     );
 
     if (needStartLoadingStarships) {
-      loadStarshipsAsync();
+      loadStarships();
     }
   }
 
   render() {
     const {
       personsStatus, persons, getPerson,
+      personCommentsStatus, personComments, loadPersonComments,
       personsSortType, setPersonsSortType,
       personsSortField, setPersonsSortField,
       planetsStatus, planets, getPlanet,
@@ -144,6 +149,9 @@ class App extends PureComponent<P> {
               status={personsStatus}
               items={persons}
               getItem={getPerson}
+              itemCommentsStatus={personCommentsStatus}
+              itemComments={personComments}
+              loadItemComments={loadPersonComments}
               sortType={personsSortType}
               setSortType={setPersonsSortType}
               sortField={personsSortField}
@@ -203,6 +211,8 @@ const mapStateToProps = (state: Type.IState) => ({
   personsSortType: PersonsSelector.getPersonsSortType(state),
   personsSortField: PersonsSelector.getPersonsSortField(state),
   getPerson: (id: Type.TId) => PersonsSelector.getPerson(state, id),
+  personCommentsStatus: PersonsSelector.getPersonCommentsStatus(state),
+  personComments: PersonsSelector.getPersonComments(state),
   planetsStatus: PlanetsSelector.getPlanetsStatus(state),
   planets: PlanetsSelector.getSortedPlanets(state),
   planetsSortType: PlanetsSelector.getPlanetsSortType(state),
@@ -229,6 +239,9 @@ const mapDispatchToPorops = (dispatch: Type.TDispatch) => ({
   setPersonsSortField: (sortField: string) => {
     dispatch(PersonsAction.setPersonsSortField(sortField));
   },
+  loadPersonComments: (id: Type.TId) => {
+    dispatch(PersonsOperation.loadPersonCommentsAsync(id));
+  },
   setPlanetsSortType: (sortType: string) => {
     dispatch(PlanetsAction.setPlanetsSortType(sortType));
   },
@@ -241,7 +254,7 @@ const mapDispatchToPorops = (dispatch: Type.TDispatch) => ({
   setStarshipsSortField: (sortField: string) => {
     dispatch(StarshipsAction.setStarshipsSortField(sortField));
   },
-  loadStarshipsAsync: () => {
+  loadStarships: () => {
     dispatch(StarshipsOperation.loadStarshipsAsync());
   },
 });

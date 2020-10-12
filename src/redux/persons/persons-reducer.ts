@@ -15,6 +15,8 @@ const initialState = {
   items: {},
   sortType: SortType.UP,
   sortField: DEFAULT_FIELD,
+  commentsStatus: null,
+  comments: [],
 };
 
 
@@ -39,6 +41,16 @@ export default (state = initialState, action: IAction) => {
       return {
         ...state,
         sortField: action.payload,
+      };
+    case PersonsType.SET_PERSON_COMMENTS_STATUS:
+      return {
+        ...state,
+        commentsStatus: action.payload,
+      };
+    case PersonsType.SET_PERSON_COMMENTS:
+      return {
+        ...state,
+        comments: action.payload,
       };
     default:
       return state;

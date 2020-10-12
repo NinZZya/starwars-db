@@ -12,6 +12,8 @@ export const getPersons = (state: IState): IPerson[] => Object.values(state[PERS
 export const getPerson = (state: IState, id: TId) => state[PERSONS_SPACE].items[id];
 export const getPersonsSortType = (state: IState) => state[PERSONS_SPACE].sortType;
 export const getPersonsSortField = (state: IState) => state[PERSONS_SPACE].sortField;
+export const getPersonCommentsStatus = (state: IState) => state[PERSONS_SPACE].commentsStatus;
+export const getPersonComments = (state: IState) => state[PERSONS_SPACE].comments;
 
 export const getSordedPersons = createSelector(
   getPersons,

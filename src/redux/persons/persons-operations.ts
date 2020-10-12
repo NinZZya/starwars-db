@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
-import { setPersons, setPersonsStatus } from './persons-actions';
-import { IPersons, TSwapiServices } from '../../types';
+import { setPersonComments, setPersons, setPersonsCommentStatus, setPersonsStatus } from './persons-actions';
+import { IComment, IPersons, TId, TSwapiServices } from '../../types';
 import { LoadingStatus } from '../../const';
 
 
@@ -15,3 +15,16 @@ export const loadPersonsAsync = () => (dispatch: Dispatch, getItems: () => void,
       dispatch(setPersonsStatus(LoadingStatus.ERROR));
     });
 };
+
+export const loadPersonCommentsAsync = (id: TId) => (dispatch: Dispatch, getItems: () => void, api: TSwapiServices) => {
+  dispatch(setPersonsCommentStatus(LoadingStatus.LOADING));
+
+  return api.getPersonComments(id)
+  .then((comments: IComment[]) => {
+    dispatch(setPersonsCommentStatus(LoadingStatus.SUCCESS));
+    dispatch(setPersonComments(comments));
+  })
+  .catch(() => {
+    dispatch(setPersonsStatus(LoadingStatus.ERROR));
+  });
+}

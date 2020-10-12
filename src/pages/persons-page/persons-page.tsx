@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import React, { PureComponent } from 'react';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import RowTwoCol from '../../components/rows/row-two-col';
 import Sort from '../../components/sort';
 import ListElements from '../../components/list-elements';
@@ -7,19 +7,10 @@ import PersonDetails from '../../components/details/person-details';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
+import Comments from '../../components/comments';
 import { AppPath, LoadingStatus, IdName, PersonSortFields } from '../../const';
-import { IPerson, TId } from '../../types';
+import { IComment, IPerson, TId } from '../../types';
 
-
-interface P {
-  status: LoadingStatus;
-  items: IPerson[];
-  getItem: (id: TId) => IPerson;
-  sortType: string;
-  setSortType: (sortType: string) => void;
-  sortField: string;
-  setSortField: (sortField: string) => void;
-}
 
 interface IParams {
   [IdName.PERSON]: string;
@@ -29,105 +20,199 @@ interface IMatch {
   params: IParams;
 }
 
+interface I {
+  status: LoadingStatus;
+  items: IPerson[];
+  getItem: (id: TId) => IPerson;
+  itemCommentsStatus: LoadingStatus | null;
+  itemComments: IComment[];
+  loadItemComments: (id: TId) => void;
+  sortType: string;
+  setSortType: (sortType: string) => void;
+  sortField: string;
+  setSortField: (sortField: string) => void;
+  match: IMatch;
+}
+
+type P = I & RouteComponentProps;
+
+interface S {
+  activeId: TId;
+}
+
 const SORT_FIELDS_KEYS = Object.keys(PersonSortFields);
 const LAST_FIELD_INDEX = SORT_FIELDS_KEYS.length - 2;
 
-const renderItem = (item: IPerson) => (
-  <Link to={`${AppPath.PERSONS}${item.id}`}>
-    <p className="h4">{item.name}</p>
-    ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
-      <span key={`${key}-${index}`}>
-        <small>
-          {`${PersonSortFields[key]}: ${item[key] !== -1 ?
-            item[key] :
-            'unknow'}
-            ${index !== LAST_FIELD_INDEX ?
-            ', ' :
-            ''
-          }`}
-        </small>
-      </span>
-    ))})
-  </Link>
-);
 
-const getItemDetails = (props: P, activeId: TId) => {
-  const { status, items: persons, getItem } = props;
-  const isNull = (status === LoadingStatus.LOADING) ||
-    !persons.length;
-
-  if (isNull) {
-    return null;
+class PersonsPage extends PureComponent<P, S> {
+  constructor(props: P) {
+    super(props);
+    this.state = {
+      activeId: '',
+    };
+    this._renderItem = this._renderItem.bind(this);
   }
 
-  if (!activeId) {
-    return <Message title={"Select person"} />;
+  _renderItem(item: IPerson) {
+
+    return (
+      <Link
+        to={`${AppPath.PERSONS}${item.id}`}
+        onClick={() => this.setState({activeId: item.id})}
+      >
+        <p className="h4">{item.name}</p>
+        ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
+          <span key={`${key}-${index}`}>
+            <small>
+              {`${PersonSortFields[key]}: ${item[key] !== -1 ?
+                item[key] :
+                'unknow'}
+                ${index !== LAST_FIELD_INDEX ?
+                  ', ' :
+                  ''
+                }`}
+            </small>
+          </span>
+        ))})
+      </Link>
+    );
   }
 
-  const person = getItem(activeId);
+  _getListPersons() {
+    const { status, items: persons } = this.props;
 
-  if (!person) {
-    return <Message title={"No data"} />;
+    if (status === LoadingStatus.LOADING) {
+      return <Spiner />;
+    }
+
+    if (status === LoadingStatus.ERROR) {
+      return <ErrorMessage />;
+    }
+
+    if (!persons.length) {
+      <Message title={"No data"} />
+    }
+
+    return (
+      <ListElements
+        items={persons}
+        renderItem={this._renderItem}
+      />
+    );
   }
 
-  return <PersonDetails item={person} />;
+  _getComments = () => {
+    const {
+      loadItemComments,
+      itemCommentsStatus,
+      itemComments,
+    } = this.props;
+
+    const { activeId } = this.state;
+
+    if (itemCommentsStatus === LoadingStatus.LOADING || itemCommentsStatus === null) {
+      return <Spiner />;
+    }
+
+    if (itemCommentsStatus === LoadingStatus.ERROR) {
+      return (
+        <ErrorMessage
+          title={'Loading comments error'}
+        >
+          <button onClick={() => loadItemComments(activeId)}>
+            Try again
+          </button>
+        </ErrorMessage>
+      );
+    }
+
+    return (
+      <Comments
+        items={itemComments}
+      />
+    );
+  }
+
+  _getItemDetails = () => {
+    const { status, items: persons, getItem } = this.props;
+    const { activeId } = this.state;
+    const isNull = (status === LoadingStatus.LOADING) ||
+      !persons.length;
+
+    if (isNull) {
+      return null;
+    }
+
+    if (!activeId) {
+      return <Message title={"Select person"} />;
+    }
+
+    const person = getItem(activeId);
+
+    if (!person) {
+      return <Message title={"No data"} />;
+    }
+
+    return (
+      <>
+        <PersonDetails item={person} />
+        {this._getComments()}
+      </>
+    );
+  }
+
+  componentDidUpdate(prevProps: P, prevState: S) {
+    const {
+      loadItemComments,
+      match,
+    } = this.props;
+
+    const activeId = this.state.activeId;
+    if (activeId !== prevState.activeId) {
+      loadItemComments(activeId);
+    }
+  }
+
+  componentDidMount() {
+    const {
+      match,
+    } = this.props;
+
+    const personsPath = `${AppPath.PERSONS}:${IdName.PERSON}`;
+    if (match) {
+      const activeId = match.params[IdName.PERSON];
+      this.setState({ activeId });
+    }
+  }
+
+  render() {
+    const {
+      sortType, setSortType,
+      sortField, setSortField,
+    } = this.props;
+
+    const { activeId } = this.state;
+
+    const listItems = this._getListPersons();
+    const itemDetails = this._getItemDetails();
+
+    return (
+      <>
+        <Sort
+          activeType={sortType}
+          activeField={sortField}
+          fields={PersonSortFields}
+          setSortType={setSortType}
+          setSortField={setSortField}
+        />
+        <RowTwoCol
+          first={listItems}
+          second={itemDetails}
+        />
+      </>
+    );
+  }
 };
 
 
-const getListPersons = (props: P) => {
-  const { status, items: persons } = props;
-
-  if (status === LoadingStatus.LOADING) {
-    return <Spiner />;
-  }
-
-  if (status === LoadingStatus.ERROR) {
-    return <ErrorMessage />;
-  }
-
-  if (!persons.length) {
-    <Message title={"No data"} />
-  }
-
-  return (
-    <ListElements
-      items={persons}
-      renderItem={renderItem}
-    />
-  );
-}
-
-const PersonsPage: FC<P> = (props) => {
-  const {
-    sortType, setSortType,
-    sortField, setSortField,
-  } = props;
-
-  const personsPath = `${AppPath.PERSONS}:${IdName.PERSON}`;
-  const personsMatch: IMatch | null = useRouteMatch(personsPath);
-  const activeId = personsMatch ?
-    personsMatch.params[IdName.PERSON] :
-    '';
-
-  const itemsDetails = getItemDetails(props, activeId);
-  const listItems = getListPersons(props);
-
-  return (
-    <>
-      <Sort
-        activeType={sortType}
-        activeField={sortField}
-        fields={PersonSortFields}
-        setSortType={setSortType}
-        setSortField={setSortField}
-      />
-      <RowTwoCol
-        first={listItems}
-        second={itemsDetails}
-      />
-    </>
-  );
-};
-
-
-export default PersonsPage;
+export default withRouter(PersonsPage);

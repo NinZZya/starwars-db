@@ -27,6 +27,17 @@ export interface IUser {
   avatar: string;
 }
 
+export interface IComment {
+  id: string,
+  rate: number;
+  user: IUser;
+  review: string;
+}
+
+export interface IComments {
+  [key: string]: IComment[];
+}
+
 export type TSwapiServices = typeof SwapiService;
 
 export interface IPlanet {
@@ -85,9 +96,9 @@ export interface IStarships {
 }
 
 export type TUserPayload = UserStatus | IUser | string | null;
-export type TPersonsPayload = LoadingStatus | IPersons | string;
-export type TPlanetsPayload = LoadingStatus | IPlanets | string;
-export type TStarshipsPayload = LoadingStatus | IStarships | string;
+export type TPersonsPayload = LoadingStatus | IPersons | string | IComment[];
+export type TPlanetsPayload = LoadingStatus | IPlanets | string | IComment[];
+export type TStarshipsPayload = LoadingStatus | IStarships | string | IComment[];
 
 export type TPayload = TUserPayload | TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
 
@@ -102,6 +113,8 @@ export interface IPersonsState {
   items: IPersons;
   sortType: string;
   sortField: string;
+  commentsStatus: LoadingStatus | null;
+  comments: IComment[];
 };
 
 export interface IPlanetsState {
