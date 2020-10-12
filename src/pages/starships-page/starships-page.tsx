@@ -38,7 +38,9 @@ const renderItem = (item: Type.IStarship) => (
     ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
       <span key={`${key}-${index}`}>
         <small>
-          {`${StarshipsSortFields[key]}: ${item[key]}
+          {`${StarshipsSortFields[key]}: ${item[key] !== -1 ?
+            item[key] :
+            'unknow'}
             ${index !== LAST_FIELD_INDEX ?
             ', ' :
             ''

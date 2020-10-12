@@ -71,10 +71,10 @@ class App extends PureComponent<P> {
     super(props);
   }
 
-  componentDidUpdate(prevProps: P) {
+  componentDidUpdate() {
     const {
       loadStarshipsAsync,
-      starshipsStatus, starships,
+      starshipsStatus,
       userStatus, user,
     } = this.props;
 
@@ -85,7 +85,6 @@ class App extends PureComponent<P> {
     );
 
     if (needStartLoadingStarships) {
-
       loadStarshipsAsync();
     }
   }
