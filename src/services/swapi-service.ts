@@ -1,4 +1,5 @@
 import users from '../mocks/users';
+import comments from '../mocks/comments';
 import {
   IPersons, IPlanets, IStarships, TId, IAuthData
 } from '../types';
@@ -141,6 +142,9 @@ export default class SwapiService {
     const id = extractId(person);
     const height = Number(person.height);
     const mass = Number(person.mass);
+    const rate = comments.persons[id] ?
+      comments.persons[id].reduce((rate, review) => rate = rate + review.rate, 0) / comments.persons[id].length :
+      0;
 
     return {
       id,
@@ -150,20 +154,25 @@ export default class SwapiService {
       height: isNaN(height) ? -1 : height,
       mass: isNaN(mass) ? -1 : mass,
       image: `${Url.IMG}${Url.PERSONS_IMG}${Number(id)}.jpg`,
+      rate,
     }
   }
 
   static adaptPlanet(planet: IRPlanet) {
     const id = extractId(planet);
+    const population = Number(planet.population);
     const rotationPeriod = Number(planet.rotation_period);
     const orbitalPeriod = Number(planet.orbital_period);
     const diameter = Number(planet.diameter);
     const surfaceWater = Number(planet.surface_water);
+    const rate = comments.planets[id] ?
+      comments.planets[id].reduce((rate, review) => rate = rate + review.rate, 0) / comments.planets[id].length :
+      0;
 
     return {
       id,
       name: planet.name,
-      population: planet.population,
+      population: isNaN(population) ? -1 : population,
       rotationPeriod: isNaN(rotationPeriod) ? -1 : rotationPeriod,
       orbitalPeriod: isNaN(orbitalPeriod) ? -1 : orbitalPeriod,
       diameter: isNaN(diameter) ? -1 : diameter,
@@ -172,6 +181,7 @@ export default class SwapiService {
       surfaceWater: isNaN(surfaceWater) ? -1 : surfaceWater,
       terrain: planet.terrain,
       image: `${Url.IMG}${Url.PLANETS_IMG}${Number(id) + 1}.jpg`,
+      rate,
     };
   }
 
@@ -181,7 +191,10 @@ export default class SwapiService {
     const length = Number(starship.length);
     const crew = Number(starship.crew);
     const passengers = Number(starship.passengers);
-    const cargoCapacity = Number(starship.cargo_capacity)
+    const cargoCapacity = Number(starship.cargo_capacity);
+    const rate = comments.starships[id] ?
+      comments.starships[id].reduce((rate, review) => rate = rate + review.rate, 0) / comments.starships[id].length :
+      0;
 
     return {
       id,
@@ -194,6 +207,7 @@ export default class SwapiService {
       passengers: isNaN(passengers) ? -1 : passengers,
       cargoCapacity: isNaN(cargoCapacity) ? -1 : cargoCapacity,
       image: '',
+      rate,
     }
   }
 }

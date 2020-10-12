@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { LoadingStatus, SortType, UserStatus } from './const';
+import { LoadingStatus, UserStatus } from './const';
 import NameSpace from './redux/name-space';
 import SwapiService from './services/swapi-service';
 
@@ -33,7 +33,7 @@ export interface IPlanet {
   [key: string]: string | number;
   id: TId;
   name: string;
-  population: string;
+  population: number;
   rotationPeriod: number;
   orbitalPeriod: number;
   diameter: number;
@@ -42,6 +42,7 @@ export interface IPlanet {
   surfaceWater: number;
   terrain: string;
   image: string;
+  rate: number;
 };
 
 export interface IPlanets {
@@ -57,6 +58,7 @@ export interface IPerson {
   height: number;
   mass: number;
   image: string;
+  rate: number;
 }
 
 export interface IPersons {
@@ -75,6 +77,7 @@ export interface IStarship {
   passengers: number;
   cargoCapacity: number;
   image: string;
+  rate: number;
 }
 
 export interface IStarships {

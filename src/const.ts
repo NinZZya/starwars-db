@@ -36,38 +36,23 @@ export const SortType: { [key: string]: string } = {
   DOWN: '▼',
 }
 
-export const PersonFields: { [key: string]: string } = {
-  name: 'Name',
-  gender: 'Gender',
-  birthYear: 'Birth Year',
-  height: 'Height',
-  mass: 'Mass',
-};
+export const MAX_RATE = 5;
 
 export const PersonSortFields: { [key: string]: string } = {
   name: 'Name',
   height: 'Height',
   mass: 'Mass',
+  rate: 'Rate',
 };
 
-export const PlanetsFields: { [key: string]: string } = {
+export const PlanetsSortFields: { [key: string]: string } = {
   name: 'Name',
   population: 'Population',
   rotationPeriod: 'Rotation Period',
   orbitalPeriod: 'Orbital Period',
   diameter: 'Diameter',
-  climate: 'Climate',
-  gravity: 'Gravity',
   surfaceWater: 'Surface Water',
-  terrain: 'Terrain',
-};
-
-export const PlanetsSortFields: { [key: string]: string } = {
-  name: 'Name',
-  rotationPeriod: 'Rotation Period',
-  orbitalPeriod: 'Orbital Period',
-  diameter: 'Diameter',
-  surfaceWater: 'Surface Water',
+  rate: 'Rate',
 };
 
 export const StarshipsSortFields: { [key: string]: string } = {
@@ -79,4 +64,5 @@ export const StarshipsSortFields: { [key: string]: string } = {
   crew: 'Crew',
   passengers: 'Passengers',
   cargoCapacity: 'Cargo Capacity',
+  rate: 'Rate',
 };

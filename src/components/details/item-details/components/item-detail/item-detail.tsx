@@ -1,14 +1,17 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
+
+type TF = (item?: any) => ReactNode;
 
 interface P {
   item?: {[key: string]: string | number};
+  renderItem?: TF | undefined;
   field: string;
   label: string;
 }
 
 export const ItemDetail: FC<P> = (props) => {
-  const { item, field, label } = props;
+  const { item, field, label, renderItem } = props;
 
   if (!item) {
     return null;
@@ -18,8 +21,8 @@ export const ItemDetail: FC<P> = (props) => {
     <li className="list-group-item">
       <span className="term">{label}</span>
       <span>
-        {item[field] !== -1 ? item[field] : 'unknown'}
-        </span>
+        {renderItem ? renderItem(item) : item[field]}
+      </span>
     </li>
   );
 }

@@ -38,7 +38,9 @@ const renderItem = (item: IPerson) => (
     ({SORT_FIELDS_KEYS.slice(1, SORT_FIELDS_KEYS.length).map((key, index) => (
       <span key={`${key}-${index}`}>
         <small>
-          {`${PersonSortFields[key]}: ${item[key]}
+          {`${PersonSortFields[key]}: ${item[key] !== -1 ?
+            item[key] :
+            'unknow'}
             ${index !== LAST_FIELD_INDEX ?
             ', ' :
             ''
@@ -91,7 +93,6 @@ const getListPersons = (props: P) => {
     <ListElements
       items={persons}
       renderItem={renderItem}
-      // path={AppPath.PERSONS}
     />
   );
 }
