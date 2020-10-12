@@ -129,7 +129,6 @@ export default class SwapiService {
       map[adaptStarship.id] = adaptStarship;
       return map;
     }, {});
-
     return starships;
   }
 

@@ -6,13 +6,11 @@ import App from './app';
 import store from './store';
 import { loadPersonsAsync } from './redux/persons/persons-operations';
 import { loadPlanetsAsync } from './redux/planets/planets-operations';
-import { loadStarshipsAsync } from './redux/starships/starships-operations';
 import './main.scss';
 
 
 store.dispatch(loadPersonsAsync());
 store.dispatch(loadPlanetsAsync());
-store.dispatch(loadStarshipsAsync());
 
 ReactDOM.render(
   <Provider store={store}>

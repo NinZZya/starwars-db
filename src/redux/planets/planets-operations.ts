@@ -9,8 +9,8 @@ export const loadPlanetsAsync = () => (dispatch: Dispatch, getItems: () => void,
 
   return api.getPlanets()
     .then((items: IPlanets) => {
-      dispatch(setPlanets(items));
       dispatch(setPlanetsStatus(LoadingStatus.SUCCESS));
+      dispatch(setPlanets(items));
     })
     .catch(() => {
       dispatch(setPlanetsStatus(LoadingStatus.ERROR));

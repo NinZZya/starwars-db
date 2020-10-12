@@ -8,8 +8,8 @@ export const loadPersonsAsync = () => (dispatch: Dispatch, getItems: () => void,
 
   return api.getPersons()
     .then((items: IPersons) => {
-      dispatch(setPersons(items));
       dispatch(setPersonsStatus(LoadingStatus.SUCCESS));
+      dispatch(setPersons(items));
     })
     .catch(() => {
       dispatch(setPersonsStatus(LoadingStatus.ERROR));
