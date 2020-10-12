@@ -107,7 +107,11 @@ const App: FC<P> = (props) => {
 
   return (
     <Router>
-      <Header user={user} userStatus={userStatus} onLogout={onLogout} />
+      <Header
+        user={user}
+        userStatus={userStatus}
+        onLogout={onLogout}
+      />
       <Switch>
         <Route exact path={mainPath}>
           {randomBlock}
