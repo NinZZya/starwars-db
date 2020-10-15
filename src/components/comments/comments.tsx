@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement, Children } from 'react';
 import ListElements from '../list-elements'
 import Rate from '../rate';
 import Message from '../messages/message';
@@ -7,6 +7,7 @@ import { IComment } from '../../types';
 
 interface P {
   items: IComment[];
+  children?: Array<ReactElement> | any;
 }
 
 const renderComment = (comment: IComment) => {
@@ -26,7 +27,7 @@ const renderComment = (comment: IComment) => {
 }
 
 const Comments: FC<P> = (props) => {
-  const { items } = props;
+  const { items, children } = props;
 
   return (
     <div className="jumbotron comments">
@@ -35,7 +36,10 @@ const Comments: FC<P> = (props) => {
       </p>
       {items.length ?
         <ListElements items={items} renderItem={renderComment} /> :
-        <Message title='No comments' />}
+        null}
+      {children ?
+            Children.map(children, (child) => child) :
+            null}
     </div>
   );
 };
