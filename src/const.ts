@@ -1,5 +1,6 @@
 export enum DataStatus {
   LOADING = 'LOADING',
+  SENDING = 'SENDING',
   SUCCESS = 'SUCCESS',
   ERROR = 'SUCSESS',
 };
