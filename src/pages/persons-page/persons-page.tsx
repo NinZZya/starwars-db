@@ -8,8 +8,9 @@ import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import Comments from '../../components/comments';
-import { AppPath, LoadingStatus, IdName, PersonSortFields } from '../../const';
-import { IComment, IPerson, TId } from '../../types';
+import NewComment from '../../components/comments/components/new-comment';
+import { AppPath, LoadingStatus, IdName, PersonSortFields, UserStatus } from '../../const';
+import { IComment, IPerson, IUser, TId } from '../../types';
 
 
 interface IParams {
@@ -23,6 +24,8 @@ interface IMatch {
 interface I {
   status: LoadingStatus;
   items: IPerson[];
+  user: IUser;
+  userStatus: UserStatus;
   getItem: (id: TId) => IPerson;
   itemCommentsStatus: LoadingStatus | null;
   itemComments: IComment[];
@@ -103,9 +106,9 @@ class PersonsPage extends PureComponent<P, S> {
 
   _getComments = () => {
     const {
+      itemComments,
       loadItemComments,
       itemCommentsStatus,
-      itemComments,
     } = this.props;
 
     const { activeId } = this.state;
@@ -117,7 +120,7 @@ class PersonsPage extends PureComponent<P, S> {
     if (itemCommentsStatus === LoadingStatus.ERROR) {
       return (
         <ErrorMessage
-          title={'Loading comments error'}
+          title="Loading comments error"
         >
           <button onClick={() => loadItemComments(activeId)}>
             Try again
@@ -126,15 +129,22 @@ class PersonsPage extends PureComponent<P, S> {
       );
     }
 
-    return (
-      <Comments
-        items={itemComments}
-      />
-    );
+  if (itemCommentsStatus === LoadingStatus.SUCCESS && !itemComments.length) {
+      return <Message text="No comments yet ..." />;
+    }
   }
 
   _getItemDetails = () => {
-    const { status, items: persons, getItem } = this.props;
+    const {
+      status, userStatus, user,
+      items: persons,
+      getItem,
+      itemComments,
+    } = this.props;
+
+    const isAuth = userStatus === UserStatus.AUTH && user;
+    const commentsContent = this._getComments();
+
     const { activeId } = this.state;
     const isNull = (status === LoadingStatus.LOADING) ||
       !persons.length;
@@ -156,7 +166,12 @@ class PersonsPage extends PureComponent<P, S> {
     return (
       <>
         <PersonDetails item={person} />
-        {this._getComments()}
+        <Comments
+          items={itemComments}
+        >
+          {commentsContent}
+          {isAuth && <NewComment onSubmitComment={() => {}}/>}
+        </Comments>
       </>
     );
   }

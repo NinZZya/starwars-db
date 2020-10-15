@@ -148,6 +148,8 @@ class App extends PureComponent<P> {
             <PersonsPage
               status={personsStatus}
               items={persons}
+              user={user}
+              userStatus={userStatus}
               getItem={getPerson}
               itemCommentsStatus={personCommentsStatus}
               itemComments={personComments}

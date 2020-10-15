@@ -1,7 +1,7 @@
 import users from '../mocks/users';
 import comments from '../mocks/comments';
 import {
-  IPersons, IPlanets, IStarships, TId, IAuthData
+  IPersons, IPlanets, IStarships, TId, IAuthData, IComment
 } from '../types';
 
 interface IRPerson {
@@ -56,6 +56,16 @@ const extractId = (item: IRPerson | IRPlanet | IRStarship) => {
   const idRegExp = /\/([0-9]*)\/$/;
   const id = item.url.match(idRegExp);
   return id ? id[1] : '';
+}
+
+const calcRate = <T extends {rate: number}>(items: T[]) => {
+  if (items.length) {
+    return items.reduce(
+      (rate, item) => rate = rate + item.rate,
+      0) / items.length;
+  }
+
+  return 0;
 }
 
 export default class SwapiService {
@@ -113,6 +123,21 @@ export default class SwapiService {
     return presonComments ? presonComments: [];
   }
 
+  static async addPersonComments(id:TId, comment: IComment) {
+    await delay(DELAY_MS);
+    // It isn't imoprtant.
+    const generatedId = String(Math.round(Math.random() * 10 + Math.random() * 100 + Math.random() * 1000));
+    const presonComments = comments.persons[id];
+
+    if (presonComments) {
+      presonComments.push({
+        ...comment,
+        ...{ id: generatedId }
+      })
+    }
+    return SwapiService.getPerson(id);
+  }
+
   static async getPlanets() {
     const responce = await this.getResource(Url.PLANETS);
     const planets = responce.results.reduce((map: IPlanets, planet: IRPlanet) => {
@@ -149,7 +174,7 @@ export default class SwapiService {
     const height = Number(person.height);
     const mass = Number(person.mass);
     const rate = comments.persons[id] ?
-      comments.persons[id].reduce((rate, review) => rate = rate + review.rate, 0) / comments.persons[id].length :
+      calcRate(comments.persons[id]) :
       0;
 
     return {
@@ -172,7 +197,7 @@ export default class SwapiService {
     const diameter = Number(planet.diameter);
     const surfaceWater = Number(planet.surface_water);
     const rate = comments.planets[id] ?
-      comments.planets[id].reduce((rate, review) => rate = rate + review.rate, 0) / comments.planets[id].length :
+      calcRate(comments.planets[id]) / comments.planets[id].length :
       0;
 
     return {
@@ -199,7 +224,7 @@ export default class SwapiService {
     const passengers = Number(starship.passengers);
     const cargoCapacity = Number(starship.cargo_capacity);
     const rate = comments.starships[id] ?
-      comments.starships[id].reduce((rate, review) => rate = rate + review.rate, 0) / comments.starships[id].length :
+      calcRate(comments.starships[id]) / comments.starships[id].length :
       0;
 
     return {
