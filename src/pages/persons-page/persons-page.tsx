@@ -9,7 +9,7 @@ import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import Comments from '../../components/comments';
 import NewComment from '../../components/comments/components/new-comment';
-import { AppPath, LoadingStatus, IdName, PersonSortFields, UserStatus } from '../../const';
+import { AppPath, DataStatus, IdName, PersonSortFields, UserStatus } from '../../const';
 import { IComment, IPerson, IUser, TId } from '../../types';
 
 
@@ -22,12 +22,12 @@ interface IMatch {
 }
 
 interface I {
-  status: LoadingStatus;
+  status: DataStatus;
   items: IPerson[];
   user: IUser;
   userStatus: UserStatus;
   getItem: (id: TId) => IPerson;
-  itemCommentsStatus: LoadingStatus | null;
+  itemCommentsStatus: DataStatus | null;
   itemComments: IComment[];
   loadItemComments: (id: TId) => void;
   sortType: string;
@@ -84,11 +84,11 @@ class PersonsPage extends PureComponent<P, S> {
   _getListPersons() {
     const { status, items: persons } = this.props;
 
-    if (status === LoadingStatus.LOADING) {
+    if (status === DataStatus.LOADING) {
       return <Spiner />;
     }
 
-    if (status === LoadingStatus.ERROR) {
+    if (status === DataStatus.ERROR) {
       return <ErrorMessage />;
     }
 
@@ -113,11 +113,11 @@ class PersonsPage extends PureComponent<P, S> {
 
     const { activeId } = this.state;
 
-    if (itemCommentsStatus === LoadingStatus.LOADING || itemCommentsStatus === null) {
+    if (itemCommentsStatus === DataStatus.LOADING || itemCommentsStatus === null) {
       return <Spiner />;
     }
 
-    if (itemCommentsStatus === LoadingStatus.ERROR) {
+    if (itemCommentsStatus === DataStatus.ERROR) {
       return (
         <ErrorMessage
           title="Loading comments error"
@@ -129,7 +129,7 @@ class PersonsPage extends PureComponent<P, S> {
       );
     }
 
-  if (itemCommentsStatus === LoadingStatus.SUCCESS && !itemComments.length) {
+  if (itemCommentsStatus === DataStatus.SUCCESS && !itemComments.length) {
       return <Message text="No comments yet ..." />;
     }
   }
@@ -146,7 +146,7 @@ class PersonsPage extends PureComponent<P, S> {
     const commentsContent = this._getComments();
 
     const { activeId } = this.state;
-    const isNull = (status === LoadingStatus.LOADING) ||
+    const isNull = (status === DataStatus.LOADING) ||
       !persons.length;
 
     if (isNull) {

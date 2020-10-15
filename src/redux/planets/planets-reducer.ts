@@ -1,5 +1,5 @@
 import PlanetsType from './planets-types';
-import { LoadingStatus, SortType, PlanetsSortFields } from '../../const';
+import { DataStatus, SortType, PlanetsSortFields } from '../../const';
 import { TPlanetsPayload } from '../../types';
 
 
@@ -11,7 +11,7 @@ interface IAction {
 };
 
 const initialState = {
-  status: LoadingStatus.LOADING,
+  status: DataStatus.LOADING,
   items: {},
   sortType: SortType.UP,
   sortField: DEFAULT_FIELD,

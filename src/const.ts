@@ -1,4 +1,4 @@
-export enum LoadingStatus {
+export enum DataStatus {
   LOADING = 'LOADING',
   SUCCESS = 'SUCCESS',
   ERROR = 'SUCSESS',

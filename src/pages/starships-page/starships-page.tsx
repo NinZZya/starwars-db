@@ -7,12 +7,12 @@ import StarshipDetails from '../../components/details/starship-details';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { AppPath, LoadingStatus, IdName, StarshipsSortFields } from '../../const';
+import { AppPath, DataStatus, IdName, StarshipsSortFields } from '../../const';
 import * as Type from '../../types';
 
 
 interface P {
-  status: LoadingStatus;
+  status: DataStatus;
   items: Type.IStarship[];
   getItem: Type.TGetStarship;
   sortType: string;
@@ -53,7 +53,7 @@ const renderItem = (item: Type.IStarship) => (
 
 const getItemDetails = (props: P, activeId: Type.TId) => {
   const { status, items: starships, getItem } = props;
-  const isNull = (status === LoadingStatus.LOADING) ||
+  const isNull = (status === DataStatus.LOADING) ||
     !starships.length;
 
   if (isNull) {
@@ -77,11 +77,11 @@ const getItemDetails = (props: P, activeId: Type.TId) => {
 const getListPersons = (props: P) => {
   const { status, items: starships } = props;
 
-  if (status === LoadingStatus.LOADING) {
+  if (status === DataStatus.LOADING) {
     return <Spiner />;
   }
 
-  if (status === LoadingStatus.ERROR) {
+  if (status === DataStatus.ERROR) {
     return <ErrorMessage />;
   }
 

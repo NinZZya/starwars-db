@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { LoadingStatus, UserStatus } from './const';
+import { DataStatus, UserStatus } from './const';
 import NameSpace from './redux/name-space';
 import SwapiService from './services/swapi-service';
 
@@ -96,9 +96,9 @@ export interface IStarships {
 }
 
 export type TUserPayload = UserStatus | IUser | string | null;
-export type TPersonsPayload = LoadingStatus | IPersons | string | IComment[];
-export type TPlanetsPayload = LoadingStatus | IPlanets | string | IComment[];
-export type TStarshipsPayload = LoadingStatus | IStarships | string | IComment[];
+export type TPersonsPayload = DataStatus | IPersons | string | IComment[];
+export type TPlanetsPayload = DataStatus | IPlanets | string | IComment[];
+export type TStarshipsPayload = DataStatus | IStarships | string | IComment[];
 
 export type TPayload = TUserPayload | TPersonsPayload | TPlanetsPayload | TStarshipsPayload ;
 
@@ -109,23 +109,23 @@ export interface IUserState {
   error: string;
 };
 export interface IPersonsState {
-  status: LoadingStatus;
+  status: DataStatus;
   items: IPersons;
   sortType: string;
   sortField: string;
-  commentsStatus: LoadingStatus | null;
+  commentsStatus: DataStatus | null;
   comments: IComment[];
 };
 
 export interface IPlanetsState {
-  status: LoadingStatus;
+  status: DataStatus;
   items: IPlanets;
   sortType: string;
   sortField: string;
 };
 
 export interface IStarshipsState {
-  status: LoadingStatus;
+  status: DataStatus;
   items: IStarships;
   sortType: string;
   sortField: string;

@@ -3,12 +3,12 @@ import { Redirect, useRouteMatch } from 'react-router-dom';
 import PlanetDeils from '../../components/details/planet-details';
 import Spiner from '../../components/spiner';
 import ErrorMessage from '../../components/messages/error-message';
-import { AppPath, LoadingStatus, IdName } from '../../const';
+import { AppPath, DataStatus, IdName } from '../../const';
 import * as Type from '../../types';
 
 
 interface P {
-  status: LoadingStatus,
+  status: DataStatus,
   items: Type.IPlanet[],
   getItem: Type.TGetPlanet;
 }
@@ -25,11 +25,11 @@ interface IMatch {
 const PlanetPage: FC<P> = (props) => {
   const { status, items: planets, getItem } = props;
 
-  if (status === LoadingStatus.LOADING) {
+  if (status === DataStatus.LOADING) {
     return <Spiner />;
   }
 
-  if (status === LoadingStatus.ERROR) {
+  if (status === DataStatus.ERROR) {
     return <ErrorMessage />;
   }
 
@@ -43,7 +43,7 @@ const PlanetPage: FC<P> = (props) => {
 
   const planet = getItem(activeId);
 
-  const isNotFound = (status === LoadingStatus.SUCCESS) && (!planetsCount || !planet);
+  const isNotFound = (status === DataStatus.SUCCESS) && (!planetsCount || !planet);
 
   if (isNotFound) {
     return <Redirect to={AppPath.NOT_FOUND} />

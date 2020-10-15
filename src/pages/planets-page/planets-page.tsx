@@ -5,12 +5,12 @@ import ListElements from '../../components/list-elements';
 import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
-import { AppPath, LoadingStatus, PlanetsSortFields } from '../../const';
+import { AppPath, DataStatus, PlanetsSortFields } from '../../const';
 import * as Type from '../../types';
 
 
 interface P {
-  status: LoadingStatus,
+  status: DataStatus,
   items: Type.IPlanet[],
   sortType: string;
   setSortType: (sortType: string) => void;
@@ -47,11 +47,11 @@ const PlanetsPage: FC<P> = (props) => {
     sortField, setSortField,
   } = props;
 
-  if (status === LoadingStatus.LOADING) {
+  if (status === DataStatus.LOADING) {
     return <Spiner />;
   }
 
-  if (status === LoadingStatus.ERROR) {
+  if (status === DataStatus.ERROR) {
     return <ErrorMessage />;
   }
 

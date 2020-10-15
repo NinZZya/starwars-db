@@ -3,7 +3,7 @@ import Spiner from '../../components/spiner';
 import Message from '../../components/messages/message';
 import ErrorMessage from '../../components/messages/error-message';
 import ItemDetails from '../../components/details/item-details';
-import { LoadingStatus } from '../../const';
+import { DataStatus } from '../../const';
 import * as Type from '../../types';
 
 
@@ -11,7 +11,7 @@ type T = typeof ItemDetails;
 type TGetItem = Type.TGetPerson | Type.TGetPlanet | Type.TGetStarship;
 
 interface P {
-  status: LoadingStatus;
+  status: DataStatus;
   items: Type.IPerson[] | Type.IPlanet[] | Type.IStarship[];
 }
 
@@ -54,7 +54,7 @@ const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) 
         return;
       }
 
-      if (status === LoadingStatus.SUCCESS) {
+      if (status === DataStatus.SUCCESS) {
         this.setState({
           activeId: items[Math.floor(Math.random() * items.length)].id,
         });
@@ -64,7 +64,7 @@ const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) 
     _getCard() {
       const { status, items } = this.props;
       const { activeId } = this.state;
-      const loaded = status === LoadingStatus.SUCCESS;
+      const loaded = status === DataStatus.SUCCESS;
 
       if (!loaded) {
         return null;
@@ -85,8 +85,8 @@ const withRandom = (Component: T, getItem: TGetItem, timeout: number = TIMEOUT) 
     render() {
       const { status } = this.props;
 
-      const loading = status === LoadingStatus.LOADING;
-      const error = status === LoadingStatus.ERROR;
+      const loading = status === DataStatus.LOADING;
+      const error = status === DataStatus.ERROR;
 
       const errorMessage = error ? <ErrorMessage /> : null;
       const spiner = loading ? <Spiner /> : null;

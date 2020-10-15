@@ -31,7 +31,7 @@ import * as StarshipsAction from '../redux/starships/starships-actions';
 import * as StarshipsOperation from '../redux/starships/starships-operations';
 import * as StarshipsSelector from '../redux/starships/starships-selectors';
 import * as Type from '../types';
-import { AppPath, IdName, LoadingStatus, UserStatus } from '../const';
+import { AppPath, IdName, DataStatus, UserStatus } from '../const';
 
 
 
@@ -39,24 +39,24 @@ interface P {
   userStatus: UserStatus;
   user: Type.IUser;
   error: string;
-  personsStatus: LoadingStatus;
+  personsStatus: DataStatus;
   persons: Type.IPerson[];
   getPerson: (id: Type.TId) => Type.IPerson;
-  personCommentsStatus: LoadingStatus | null;
+  personCommentsStatus: DataStatus | null;
   personComments: Type.IComment[];
   loadPersonComments: (id: Type.TId) => void;
   personsSortType: string;
   setPersonsSortType: (sortType: string) => void;
   personsSortField: string;
   setPersonsSortField: (sortFiled: string) => void;
-  planetsStatus: LoadingStatus;
+  planetsStatus: DataStatus;
   planets: Type.IPlanet[];
   planetsSortType: string;
   setPlanetsSortType: (sortType: string) => void;
   planetsSortField: string;
   setPlanetsSortField: (sortFiled: string) => void;
   getPlanet: (id: Type.TId) => Type.IPlanet;
-  starshipsStatus: LoadingStatus;
+  starshipsStatus: DataStatus;
   starships: Type.IStarship[];
   getStarship: Type.TGetStarship;
   starshipsSortType: string;
@@ -85,7 +85,7 @@ class App extends PureComponent<P> {
     const needStartLoadingStarships = (
       (userStatus === UserStatus.AUTH) &&
       (user !== null) &&
-      (starshipsStatus !== LoadingStatus.SUCCESS)
+      (starshipsStatus !== DataStatus.SUCCESS)
     );
 
     if (needStartLoadingStarships) {

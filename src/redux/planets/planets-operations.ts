@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { setPlanets, setPlanetsStatus } from './planets-actions';
 import { IPlanets, TSwapiServices } from '../../types';
-import { LoadingStatus } from '../../const';
+import { DataStatus } from '../../const';
 
 
 
@@ -9,10 +9,10 @@ export const loadPlanetsAsync = () => (dispatch: Dispatch, getItems: () => void,
 
   return api.getPlanets()
     .then((items: IPlanets) => {
-      dispatch(setPlanetsStatus(LoadingStatus.SUCCESS));
+      dispatch(setPlanetsStatus(DataStatus.SUCCESS));
       dispatch(setPlanets(items));
     })
     .catch(() => {
-      dispatch(setPlanetsStatus(LoadingStatus.ERROR));
+      dispatch(setPlanetsStatus(DataStatus.ERROR));
     });
 };

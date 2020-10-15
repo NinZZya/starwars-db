@@ -1,6 +1,6 @@
 import PersonsType from './persons-types';
 import { TPersonsPayload } from '../../types';
-import { LoadingStatus, SortType, PersonSortFields } from '../../const';
+import { DataStatus, SortType, PersonSortFields } from '../../const';
 
 
 const DEFAULT_FIELD = Object.keys(PersonSortFields)[0];
@@ -11,7 +11,7 @@ interface IAction {
 };
 
 const initialState = {
-  status: LoadingStatus.LOADING,
+  status: DataStatus.LOADING,
   items: {},
   sortType: SortType.UP,
   sortField: DEFAULT_FIELD,
