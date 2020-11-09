@@ -11,11 +11,11 @@
   display: flex;
   width: 150px;
   text-align: left;
+}
 
-  &::after {
-    margin-top: 10px;
-    margin-left: auto;
-  }
+.sort-fields .btn::after {
+  margin-top: 10px;
+  margin-left: auto;
 }
 
 .sort-label {

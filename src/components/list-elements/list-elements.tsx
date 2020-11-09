@@ -1,25 +1,35 @@
 import React, { FC, ReactNode } from 'react';
 
-
-type TI= Array<ReactNode>;
-type TF = (item?: any) => ReactNode;
-
-interface P {
-  items: TI,
-  renderItem?: TF | undefined;
+interface Item {
+  [key: string]: string | number | Record<string, string | number>;
 }
 
-const renderItems = (items: TI, renderItem?: TF) => items.map((item, index) => (
-  <li
-    key={`list-element-${index}`}
-  >
-    <div className="list-group-item">
-      {renderItem ? renderItem(item) : item}
-    </div>
-  </li>
-))
+type RenderItem = (item: Item) => ReactNode;
 
-const ListElements: FC<P> = (props) => {
+interface ListElementsProp {
+  items: Item[],
+  renderItem?: RenderItem;
+}
+
+const renderItems = (items: Item[], renderItem?: RenderItem) => {
+  if (items.length) {
+    return items.map((item, index) => {
+
+      return (
+        <li
+          key={`list-element-${index}`}
+        >
+          <div className="list-group-item">
+            {renderItem ? renderItem(item) : item}
+          </div>
+        </li>
+      )
+    })
+  }
+
+}
+
+const ListElements: FC<ListElementsProp> = (props) => {
   const { items, renderItem } = props;
 
   return (

@@ -1,17 +1,19 @@
 import React, { FC, ReactNode, Children } from 'react';
-import { IText } from '../../../types';
+import './error-message';
 
 
-interface P {
+type Text = Record<string, string>;
+
+interface ErrorMessageProp {
   title?: string;
   text?: string;
   children?: ReactNode;
 }
 
-export const ErrorMessageTitle: FC<IText> = ({text}) => <p className="boom">{text}</p>;
-export const ErrorMessageText: FC<IText> = ({text}) => <span>{text}</span>;
+export const ErrorMessageTitle: FC<Text> = ({text}) => <p className="boom">{text}</p>;
+export const ErrorMessageText: FC<Text> = ({text}) => <span>{text}</span>;
 
-const ErrorMessage: FC<P> = (props) => {
+const ErrorMessage: FC<ErrorMessageProp> = (props) => {
   const { title, text, children } = props;
   const texts = text ? text.split('\n') : null;
 

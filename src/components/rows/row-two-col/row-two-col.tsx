@@ -1,12 +1,13 @@
 import React, { FC, ReactElement } from 'react';
+import './row-two-col';
 
 
-interface P {
+interface RowTwoColProp {
   first?: ReactElement | null;
   second?: ReactElement | null;
 }
 
-const RowTwoCol: FC<P> = (props) => {
+const RowTwoCol: FC<RowTwoColProp> = (props) => {
   const { first, second } = props;
 
   return (

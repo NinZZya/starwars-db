@@ -1,9 +1,15 @@
 import React, { FC } from 'react';
-import withAtiveFlag from '../../hocs/with-active-flag';
-import { SortType } from '../../const';
+import { withActiveFlag } from '../../hocs';
+import './sort';
 
 
-interface P {
+export const SortType: { [key: string]: string } = {
+  UP: '▲',
+  DOWN: '▼',
+}
+
+
+interface SortProp {
   isActive?: boolean;
   onActiveChange?: () => void;
   activeType?: string;
@@ -13,7 +19,7 @@ interface P {
   setSortField: (sortField: string) => void;
 }
 
-const Sort: FC<P> = (props) => {
+const Sort: FC<SortProp> = (props) => {
   const {
     activeType, activeField, fields,
     setSortType, setSortField,
@@ -70,4 +76,4 @@ const Sort: FC<P> = (props) => {
 };
 
 
-export default withAtiveFlag<P>(Sort, false);
+export default withActiveFlag<SortProp>(Sort, false);

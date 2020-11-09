@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { FC } from 'react';
+import './spiner';
 
 
-const Spinner = () => {
+const Spinner: FC = () => {
   return (
     <div className="lds-css">
       <div className="lds-double-ring">

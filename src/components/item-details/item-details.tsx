@@ -1,12 +1,18 @@
 import React, { FC, Children, cloneElement, ReactElement } from 'react';
-import { IItem } from '../../../types';
+import './item-details';
 
-interface P {
-  item: IItem;
-  children?: Array<ReactElement>;
+interface Item {
+  [key: string]: string | number | Record<string, string | number>;
+  name: string;
+  image: string;
 }
 
-const ItemDetails: FC<P> = (props) => {
+interface ItemDetailsProp {
+  item: Item;
+  children?: ReactElement[];
+}
+
+const ItemDetails: FC<ItemDetailsProp> = (props) => {
   const { item, children } = props;
   const { image, name } = item;
 

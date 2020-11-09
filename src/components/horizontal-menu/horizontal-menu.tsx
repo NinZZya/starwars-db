@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 
-interface IItem {
+interface Item {
   name: string;
   path: string;
   onClickItem?: () => void;
 }
 
-interface P {
-  items: IItem[];
+interface HorizontalMenuProp {
+  items: Item[];
 }
 
-const HorizontalMenu: FC<P> = (props) => {
+const HorizontalMenu: FC<HorizontalMenuProp> = (props) => {
   const { items } = props;
   return (
     <ul className="d-flex menu">

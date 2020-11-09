@@ -1,4 +1,5 @@
 import React, { FC, ReactNode } from 'react';
+import './item-detail.css';
 
 
 type TF = (item?: any) => ReactNode;
