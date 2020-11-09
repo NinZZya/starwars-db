@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import App from './app';
-import store from './store';
-import { loadPersonsAsync } from './redux/persons/persons-operations';
-import { loadPlanetsAsync } from './redux/planets/planets-operations';
-import './main.scss';
+import { App } from './app';
+import store from './store/store';
+import { loadPersonsAsync } from './store/redux/persons/persons-operations';
+import { loadPlanetsAsync } from './store/redux/planets/planets-operations';
 
 
 store.dispatch(loadPersonsAsync());
