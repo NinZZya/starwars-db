@@ -31,13 +31,11 @@ module.exports = {
         use: ['ts-loader']
       },
       {
-        test: /\.s[ac]ss$/,
+        test: /\.сss$/,
         use: [
           MiniCssExtractPlugin.loader,
           // Translates CSS into CommonJS
           'css-loader',
-          // Compiles Sass to CSS
-          'sass-loader',
         ],
       },
     ],

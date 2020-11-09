@@ -1,13 +1,14 @@
 import React, { FC, ReactElement } from 'react';
+import './row-three-col';
 
 
-interface P {
+interface RowThreeColProp {
   first?: ReactElement | null;
   second?: ReactElement | null;
   third?: ReactElement | null;
 }
 
-const RowThreeCol: FC<P> = (props) => {
+const RowThreeCol: FC<RowThreeColProp> = (props) => {
   const { first, second, third } = props;
 
   return (

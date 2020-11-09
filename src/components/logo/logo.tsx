@@ -1,12 +1,13 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import './logo.css';
 
 
-interface P {
+interface LogoProp {
   path: string;
 }
 
-const Logo: FC<P> = (props) => {
+const Logo: FC<LogoProp> = (props) => {
   const {path} = props;
   return (
     <Link to={path} >

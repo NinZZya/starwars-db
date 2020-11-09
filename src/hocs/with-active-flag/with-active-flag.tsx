@@ -1,13 +1,21 @@
-import React, { PureComponent, ComponentType, PropsWithChildren } from 'react';
+import React, {
+  PureComponent,
+  ComponentType,
+  PropsWithChildren
+} from 'react';
+import './with-active-flag';
 
 
-interface S {
+interface WithActiveFlagState {
   isActive?: boolean | undefined;
 }
 
-const withActiveFlag = <P extends PropsWithChildren<S> >(Component: ComponentType<P>, status = false) => {
+const withActiveFlag = <P extends PropsWithChildren<WithActiveFlagState>>(
+  Component: ComponentType<P>,
+  status = false
+) => {
 
-  class WithActiveFlag extends PureComponent<P, S> {
+  class WithActiveFlag extends PureComponent<P, WithActiveFlagState> {
     constructor(props: P) {
       super(props);
 
@@ -15,10 +23,10 @@ const withActiveFlag = <P extends PropsWithChildren<S> >(Component: ComponentTyp
         isActive: status,
       };
 
-      this._handleActiveChange = this._handleActiveChange.bind(this);
+      this.handleActiveChange = this.handleActiveChange.bind(this);
     }
 
-    _handleActiveChange() {
+    private handleActiveChange() {
       this.setState((prevState) => ({ isActive: !prevState.isActive }));
     }
 
@@ -26,7 +34,7 @@ const withActiveFlag = <P extends PropsWithChildren<S> >(Component: ComponentTyp
       return <Component
         {...this.props}
         isActive={this.state.isActive}
-        onActiveChange={this._handleActiveChange}
+        onActiveChange={this.handleActiveChange}
       />
     }
   }
